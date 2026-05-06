@@ -43,7 +43,7 @@
     .bg-approved { background: #2ecc71; } .bg-pending { background: #f1c40f; } .bg-rejected { background: #e74c3c; }
     .btn-view { background: #007bff; color: white; padding: 5px 12px; border-radius: 5px; text-decoration: none; font-size: 12px; font-weight: bold; }
 
-    /* User Management Box */
+    /* Admin specific */
     .user-box { background: white; padding: 30px; border-radius: 10px; border: 2px solid #0984e3; margin-bottom: 20px;}
     
     /* Request Form Container */
@@ -72,7 +72,7 @@
     
     .admin-valuation-form { background: #fdf2f2; padding: 25px; border-radius: 10px; border: 1px solid #ffc9c9; }
     .admin-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
-    .admin-input-row input { font-size: 20px; font-weight: bold; width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 5px;}
+    .admin-input-row input { font-size: 20px; font-weight: bold; width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;}
     .admin-valuation-form label { font-weight:bold; color:#c0392b; display:block; margin-bottom:5px;}
     .admin-valuation-form textarea { width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box; }
     .btn-approve { background: #27ae60; color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size:16px;}
@@ -230,7 +230,7 @@
   // ==========================================
   // මෙතනට ඔයාගේ API URL එක දාන්න!
   // ==========================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbxYLpMgnko5YSIA_kLU3NKgWlv1pnbczO21SH-9qDSX66KxMIkvANFZgcIj68S-Nz4j/exec"; 
+  const API_URL = "https://script.google.com/macros/s/AKfycbwBw85FzkUHL4tWeVsrk4m50ux3HUFIEvtLrL9kU8PWrQrwpVOFlrV_-nrUuDegW8Qq/exec"; 
 
   let currentUser = { username: "", role: "", email: "" };
   let allData = [];
@@ -482,8 +482,8 @@
           </div>
           <div class="admin-valuation-form">
             <div class="admin-input-row">
-              <div><label>Market Value</label><input type="text" id="m-${r.row}" value="" oninput="formatInput(this)"></div>
-              <div><label>Sale Value</label><input type="text" id="s-${r.row}" value="" oninput="formatInput(this)"></div>
+              <div><label>Market Value</label><input type="text" id="m-${r.row}" value="${r.defaultMarket ? Number(r.defaultMarket).toLocaleString('en-US') : ''}" oninput="formatInput(this)"></div>
+              <div><label>Sale Value</label><input type="text" id="s-${r.row}" value="${r.defaultSale ? Number(r.defaultSale).toLocaleString('en-US') : ''}" oninput="formatInput(this)"></div>
             </div>
             <label>Remarks</label>
             <textarea id="rem-${r.row}" rows="2"></textarea>
