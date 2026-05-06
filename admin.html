@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDT Admin Panel</title>
+  <style>
+    /* Global Styles */
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f9; color: #2d3436; margin: 0; padding: 0; }
+    
+    /* Login Section Styles */
+    #login-section { display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #74b9ff, #0984e3); }
+    .login-box { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 100%; max-width: 350px; text-align: center; }
+    .login-box h2 { color: #2c3e50; margin-bottom: 25px; }
+    .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+    .login-box button { width: 100%; padding: 12px; background: #0984e3; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .login-box button:hover { background: #0056b3; }
+    
+    /* Admin Section Styles */
+    #admin-section { display: none; padding: 25px; }
+    .top-bar { background: #2c3e50; padding: 15px; text-align: right; position: sticky; top: 0; z-index: 100; border-radius: 0 0 10px 10px; color: white; display: flex; justify-content: space-between; align-items: center;}
+    .btn-logout { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
+
+    .card { background: white; padding: 30px; margin: 20px auto; max-width: 1000px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-top: 6px solid #0984e3; }
+    .veh-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f2f6; padding-bottom: 15px; margin-bottom: 25px; }
+    .veh-no { font-size: 28px; color: #0984e3; font-weight: bold; }
+    
+    .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+    .info-box { background: #f8f9fa; border: 1px solid #e1e8ed; padding: 12px; border-radius: 10px; }
+    .info-box strong { display: block; font-size: 10px; color: #b2bec3; text-transform: uppercase; }
+    .info-box span { font-size: 15px; font-weight: 600; }
+
+    .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+    .photo-item { background: #000; border-radius: 15px; overflow: hidden; border: 2px solid #ddd; text-align: center; cursor: pointer; }
+    .photo-item img { width: 100%; height: 300px; object-fit: contain; background: #333; }
+    .photo-label { background: #eee; padding: 8px; font-weight: bold; font-size: 13px; color: #333; }
+
+    .valuation-form { background: #fdf2f2; padding: 25px; border-radius: 15px; border: 1px solid #ffc9c9; margin-top: 30px; }
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
+    label { font-weight: bold; font-size: 14px; color: #c0392b; display: block; margin-bottom: 5px; }
+    input[type="text"] { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 8px; font-size: 22px; font-weight: bold; box-sizing: border-box; }
+    textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+    
+    .actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px; }
+    .btn-approve { background: #27ae60; color: white; border: none; padding: 15px 40px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+    .btn-reject { background: #dc3545; color: white; border: none; padding: 15px 40px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+    .status-msg { text-align: center; padding: 30px; font-weight: bold; color: #28a745; font-size: 20px; }
+
+    /* Zoom Modal */
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow: hidden; cursor: grab; }
+    .modal-content-container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+    .modal-content { max-width: 95%; max-height: 95vh; box-shadow: 0 5px 35px rgba(0,0,0,0.5); transform-origin: center; cursor: zoom-in; }
+    .close-btn { position: absolute; top: 15px; right: 30px; color: white; font-size: 50px; font-weight: bold; cursor: pointer; z-index: 1100; }
+    .rotate-btn { position: absolute; top: 25px; right: 90px; background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; z-index: 1100; font-weight: bold; border: 1px solid white;}
+  </style>
+</head>
+<body>
+
+  <!-- Login Section -->
+  <div id="login-section">
+    <div class="login-box">
+      <h2>🔐 Admin Login</h2>
+      <input type="text" id="uname" placeholder="Username" required>
+      <input type="password" id="pwd" placeholder="Password" required>
+      <button onclick="doLogin()" id="loginBtn">Login to Portal</button>
+      <div id="loginError" style="color:red; margin-top:10px; font-weight:bold; display:none;">Invalid Credentials!</div>
+    </div>
+  </div>
+
+  <!-- Admin Panel Section -->
+  <div id="admin-section">
+    <div class="top-bar">
+      <h3>🚗 TDT Admin Portal</h3>
+      <button class="btn-logout" onclick="location.reload()">Logout</button>
+    </div>
+    
+    <h2 style="text-align:center;">Pending Requests</h2>
+    <div id="list"><h3 style="text-align:center;">Loading requests... Please wait.</h3></div>
+  </div>
+
+  <!-- Zoom Modal -->
+  <div id="imgModal" class="modal">
+    <button class="rotate-btn" onclick="rotateImage(event)">↻ Rotate</button>
+    <span class="close-btn" onclick="closeModal()">×</span>
+    <div class="modal-content-container" id="modalContainer">
+      <img class="modal-content" id="fullImage">
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // මෙතනට ඔයාගේ API URL එක දාන්න!
+    // ==========================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbwGUYpSXgx8uqNTjEFXXuJ71C76fFWFftr_gidqXwD73Wd0MP3M5MOhdeERHsMHSfE2/exec"; 
+
+    // --- 1. Login Logic ---
+    async function doLogin() {
+      const u = document.getElementById('uname').value;
+      const p = document.getElementById('pwd').value;
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('loginError');
+      
+      if(!u || !p) return;
+      btn.innerText = "Checking...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(API_URL + `?action=checkLogin&username=${u}&password=${p}`);
+        const json = await res.json();
+        
+        if (json.success && json.data.valid) {
+          document.getElementById('login-section').style.display = 'none';
+          document.getElementById('admin-section').style.display = 'block';
+          loadRequests(); // Load Admin data
+        } else {
+          err.style.display = "block";
+          btn.innerText = "Login to Portal";
+          btn.disabled = false;
+        }
+      } catch (e) {
+        err.innerText = "Connection Error!";
+        err.style.display = "block";
+        btn.innerText = "Login to Portal";
+        btn.disabled = false;
+      }
+    }
+
+    // --- 2. Load Dashboard Logic ---
+    async function loadRequests() {
+      try {
+        const res = await fetch(API_URL + "?action=getPendingRequests");
+        const json = await res.json();
+        
+        const list = document.getElementById('list');
+        if (!json.success || json.data.length === 0) { 
+          list.innerHTML = "<h3 style='text-align:center;'>No pending requests! 🎉</h3>"; 
+          return; 
+        }
+        
+        list.innerHTML = json.data.map(r => `
+          <div class="card" id="row-${r.row}">
+            <div class="veh-header">
+              <span class="veh-no">🚗 ${r.vehNo}</span>
+              <span style="color:#636e72">${r.make} ${r.model} (${r.yom})</span>
+            </div>
+            <div class="info-grid">
+              <div class="info-box"><strong>Chassis</strong><span>${r.chassisNo}</span></div>
+              <div class="info-box"><strong>Engine</strong><span>${r.engineNo}</span></div>
+              <div class="info-box"><strong>Req Amt</strong><span>Rs. ${Number(r.reqAmount).toLocaleString('en-US')}</span></div>
+            </div>
+            <div class="photo-grid">
+              ${renderPhoto(r.imgFront, 'FRONT')} ${renderPhoto(r.imgBack, 'REAR')}
+              ${renderPhoto(r.imgCr, 'CR DOCUMENT')} ${renderPhoto(r.imgChassis, 'CHASSIS PLATE')}
+              ${renderPhoto(r.imgEngine, 'ENGINE')} ${renderPhoto(r.imgMeter, 'SPEEDO METER')}
+              ${renderPhoto(r.imgSheet, 'INSPECTION')} ${renderPhoto(r.imgInside, 'INTERIOR')}
+              ${renderPhoto(r.imgCustomer, 'CUSTOMER')} ${renderPhoto(r.imgOfficer, 'OFFICER')}
+            </div>
+            <div class="valuation-form">
+              <div class="input-row">
+                <div><label>Market Value</label><input type="text" id="m-${r.row}" value="${r.defaultMarket ? Number(r.defaultMarket).toLocaleString('en-US') : ''}" oninput="formatInput(this)"></div>
+                <div><label>Sale Value</label><input type="text" id="s-${r.row}" value="${r.defaultSale ? Number(r.defaultSale).toLocaleString('en-US') : ''}" oninput="formatInput(this)"></div>
+              </div>
+              <label>Remarks</label>
+              <textarea id="rem-${r.row}" rows="2"></textarea>
+              <div class="actions">
+                <button class="btn-reject" onclick="process(${r.row}, 'Rejected')">Reject</button>
+                <button class="btn-approve" onclick="process(${r.row}, 'Approved')">Approve & Save</button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        document.getElementById('list').innerHTML = "<h3 style='color:red; text-align:center;'>Error loading data!</h3>";
+      }
+    }
+
+    function formatInput(el) {
+      let val = el.value.replace(/[^0-9]/g, '');
+      if (val) el.value = Number(val).toLocaleString('en-US');
+    }
+    function cleanNum(str) { return str ? str.replace(/,/g, '') : "0"; }
+
+    function renderPhoto(url, label) {
+      if (!url || url.includes("No Image")) return "";
+      let directUrl = url;
+      if (url.includes("drive.google.com")) {
+        let id = url.includes("id=") ? url.split("id=")[1].split("&")[0] : url.split("/d/")[1].split("/")[0];
+        directUrl = "https://lh3.googleusercontent.com/d/" + id;
+      }
+      return `<div class="photo-item" onclick="openModal('${directUrl}')"><img src="${directUrl}"><div class="photo-label">${label}</div></div>`;
+    }
+
+    // --- 3. Image Zoom/Pan/Rotate Logic ---
+    var modal = document.getElementById("imgModal"), img = document.getElementById("fullImage"), container = document.getElementById("modalContainer");
+    var scale = 1, rotateDeg = 0, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
+
+    function openModal(src) { modal.style.display = "block"; img.src = src; scale = 1; rotateDeg = 0; pointX = 0; pointY = 0; updateTransform(); document.body.style.overflow="hidden"; }
+    function closeModal() { modal.style.display = "none"; img.src = ""; document.body.style.overflow="auto"; }
+    function rotateImage(e) { e.stopPropagation(); rotateDeg += 90; if (rotateDeg >= 360) rotateDeg = 0; if(scale<1) scale=1; updateTransform(); }
+    function updateTransform() { img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale}) rotate(${rotateDeg}deg)`; }
+
+    container.onwheel = function(e) {
+      e.preventDefault(); var delta = -e.deltaY;
+      if (delta > 0) scale = Math.min(scale + 0.15, 5); else scale = Math.max(scale - 0.15, 1);
+      if (scale === 1) { pointX = 0; pointY = 0; } updateTransform();
+    }
+    container.onmousedown = function(e) { if(e.target !== img && e.target !== container) return; if(scale <= 1) return; e.preventDefault(); startX = e.clientX - pointX; startY = e.clientY - pointY; panning = true; modal.style.cursor = "grabbing"; }
+    window.onmouseup = function() { if(!panning) return; panning = false; modal.style.cursor = "grab"; }
+    container.onmousemove = function(e) { if(!panning) return; pointX = e.clientX - startX; pointY = e.clientY - startY; updateTransform(); }
+    window.addEventListener('keydown', function(e) { if(modal.style.display==="block" && e.key==="Escape") closeModal(); });
+
+    // --- 4. Process (Approve/Reject) Logic ---
+    async function process(row, status) {
+      const m = cleanNum(document.getElementById('m-'+row).value);
+      const s = cleanNum(document.getElementById('s-'+row).value);
+      const r = document.getElementById('rem-'+row).value;
+
+      if(status === 'Approved' && (!m || m == "0" || !s || s == "0")) { alert("Enter Market and Sale values!"); return; }
+      if(!confirm("Do you want to " + status + " this?")) return;
+
+      document.getElementById('row-'+row).innerHTML = `<h3 style="text-align:center; color:#0984e3;">⏳ Processing... Generating PDF & Emails...</h3>`;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ action: "approveRequest", data: { row, m, s, r, status } })
+        });
+        const json = await res.json();
+        if(json.success) {
+          document.getElementById('row-'+row).innerHTML = `<div class="status-msg">✅ ${json.result}</div>`;
+        } else {
+          document.getElementById('row-'+row).innerHTML = `<div class="status-msg" style="color:red;">❌ Error: ${json.error}</div>`;
+        }
+      } catch (e) {
+        alert("Network Error!");
+      }
+    }
+  </script>
+</body>
+</html>
