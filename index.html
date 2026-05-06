@@ -5,7 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vehicle Valuation Request</title>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; }
+    /* Global Styles */
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; color: #333; margin: 0; padding: 0; }
+    
+    /* Login Section Styles */
+    #login-section { display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #2ecc71, #27ae60); }
+    .login-box { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 100%; max-width: 350px; text-align: center; }
+    .login-box h2 { color: #2c3e50; margin-bottom: 25px; }
+    .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+    .login-box button { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .login-box button:hover { background: #219150; }
+
+    /* Form Section Styles */
+    #form-section { display: none; padding: 20px; }
+    .top-bar { background: #2c3e50; padding: 10px; text-align: right; border-radius: 5px; margin-bottom: 20px; color: white; display: flex; justify-content: space-between; align-items: center;}
+    .btn-logout { background: #e74c3c; color: white; border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
     .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
     h2 { color: #2c3e50; text-align: center; border-bottom: 3px solid #28a745; padding-bottom: 10px; }
     h3 { color: #28a745; margin-top: 25px; font-size: 18px; border-left: 5px solid #28a745; padding-left: 10px; }
@@ -13,11 +28,13 @@
     .full-width { grid-column: span 2; }
     label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; }
     input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
+    
     .photo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; background: #f1f3f5; padding: 15px; border-radius: 8px; }
     .photo-box { background-color: white; padding: 10px; border: 1px dashed #adb5bd; border-radius: 5px; text-align: center; position: relative; height: 90px; display: flex; flex-direction: column; justify-content: center; align-items: center; background-repeat: no-repeat; background-position: center; background-size: cover; }
     .photo-box label { font-size: 11px; margin-bottom: 3px; background: rgba(255,255,255,0.85); padding: 2px 5px; border-radius: 4px; z-index: 2; pointer-events: none; font-weight: bold; }
     .photo-box input[type="file"] { font-size: 11px; padding: 5px; z-index: 2; width: 90%; background: rgba(255,255,255,0.8); border-radius: 4px; margin-top: 5px; }
     .clear-btn { position: absolute; top: 5px; right: 5px; background: rgba(220, 53, 69, 0.9); color: white; width: 22px; height: 22px; border-radius: 50%; font-weight: bold; font-size: 14px; cursor: pointer; display: none; z-index: 10; line-height: 20px; text-align: center; border: 1px solid white; transition: 0.2s; }
+    
     button.submit-btn { width: 100%; padding: 15px; background-color: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 25px; transition: 0.3s; }
     #status { margin-top: 20px; text-align: center; font-weight: bold; padding: 10px; border-radius: 5px; font-size: 16px; }
     .loader { display: none; margin: 10px auto; border: 4px solid #f3f3f3; border-top: 4px solid #28a745; border-radius: 50%; width: 30px; height: 30px; animation: spin 2s linear infinite; }
@@ -26,117 +43,120 @@
 </head>
 <body>
 
-<div class="container">
-  <h2>Vehicle Valuation Request Form</h2>
-  
-  <form id="vForm">
-    <h3>1. Vehicle Identification</h3>
-    <div class="section">
-      <div class="full-width"><label>Vehicle Number</label><input type="text" name="vehicleNo" id="vehicleNo" required></div>
-      <div>
-        <label>Vehicle Type</label>
-        <select id="vType" name="vType" onchange="updateMake();" required><option value="">Loading...</option></select>
-      </div>
-      <div>
-        <label>Make</label>
-        <select id="make" name="make" onchange="updateModel();" required disabled><option value="">-- Select Make --</option></select>
-      </div>
-      <div>
-        <label>Model</label>
-        <select id="model" name="model" required disabled><option value="">-- Select Model --</option></select>
-      </div>
-      <div><label>Year of Manufacture (YOM)</label><input type="number" name="yom" required></div>
+  <!-- Login Section -->
+  <div id="login-section">
+    <div class="login-box">
+      <h2>🔐 Officer Login</h2>
+      <input type="text" id="uname" placeholder="Username" required>
+      <input type="password" id="pwd" placeholder="Password" required>
+      <button onclick="doLogin()" id="loginBtn">Login to Request Form</button>
+      <div id="loginError" style="color:red; margin-top:10px; font-weight:bold; display:none;">Invalid Credentials!</div>
     </div>
+  </div>
 
-    <h3>2. Technical & Other Details</h3>
-    <div class="section">
-      <div><label>Chassis Number</label><input type="text" name="chassisNo" required></div>
-      <div><label>Engine Number</label><input type="text" name="engineNo" required></div>
-      <div><label>Color</label><input type="text" name="color" required></div>
-      <div><label>Engine CC</label><input type="number" name="engCc" required></div>
-      <div>
-        <label>Fuel Type</label>
-        <select name="fuelType"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select>
+  <!-- Form Section -->
+  <div id="form-section">
+    <div class="container">
+      
+      <div class="top-bar">
+        <span id="welcomeMsg" style="font-weight:bold;">Welcome!</span>
+        <button class="btn-logout" onclick="location.reload()">Logout</button>
       </div>
-      <div><label>Req. Valuation Amount (LKR)</label><input type="number" name="reqAmount" required></div>
-      <div class="full-width"><label>Remarks</label><textarea name="remarks" rows="2"></textarea></div>
+
+      <h2>Vehicle Valuation Request Form</h2>
+      
+      <form id="vForm">
+        <h3>1. Vehicle Identification</h3>
+        <div class="section">
+          <div class="full-width"><label>Vehicle Number</label><input type="text" name="vehicleNo" required></div>
+          <div><label>Vehicle Type</label><select id="vType" name="vType" onchange="updateMake();" required><option value="">Loading...</option></select></div>
+          <div><label>Make</label><select id="make" name="make" onchange="updateModel();" required disabled><option value="">-- Select Make --</option></select></div>
+          <div><label>Model</label><select id="model" name="model" required disabled><option value="">-- Select Model --</option></select></div>
+          <div><label>Year of Manufacture (YOM)</label><input type="number" name="yom" required></div>
+        </div>
+
+        <h3>2. Technical & Other Details</h3>
+        <div class="section">
+          <div><label>Chassis Number</label><input type="text" name="chassisNo" required></div>
+          <div><label>Engine Number</label><input type="text" name="engineNo" required></div>
+          <div><label>Color</label><input type="text" name="color" required></div>
+          <div><label>Engine CC</label><input type="number" name="engCc" required></div>
+          <div><label>Fuel Type</label><select name="fuelType"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
+          <div><label>Req. Valuation Amount (LKR)</label><input type="number" name="reqAmount" required></div>
+          <div class="full-width"><label>Remarks</label><textarea name="remarks" rows="2"></textarea></div>
+        </div>
+
+        <h3>3. Inspection Photos (Mandatory)</h3>
+        <div class="photo-grid">
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Front View *</label><input type="file" name="img_front" accept="image/*" onchange="previewImage(this)" required></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Back View *</label><input type="file" name="img_back" accept="image/*" onchange="previewImage(this)" required></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>CR Copy *</label><input type="file" name="img_cr" accept="image/*" onchange="previewImage(this)" required></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Chassis Plate *</label><input type="file" name="img_chassis" accept="image/*" onchange="previewImage(this)" required></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Engine Bay *</label><input type="file" name="img_engine" accept="image/*" onchange="previewImage(this)" required></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Meter (Mileage) *</label><input type="file" name="img_meter" accept="image/*" onchange="previewImage(this)" required></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Inspection Sheet *</label><input type="file" name="img_sheet" accept="image/*" onchange="previewImage(this)" required></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Inside/Interior (Opt)</label><input type="file" name="img_inside" accept="image/*" onchange="previewImage(this)"></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Tyre Condition (Opt)</label><input type="file" name="img_tyre" accept="image/*" onchange="previewImage(this)"></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Customer w/ Veh *</label><input type="file" name="img_customer" accept="image/*" onchange="previewImage(this)" required></div>
+          <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Officer w/ Veh *</label><input type="file" name="img_officer" accept="image/*" onchange="previewImage(this)" required></div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="submit-btn">Submit Request</button>
+      </form>
+      
+      <div class="loader" id="loader"></div>
+      <div id="status"></div>
     </div>
-
-    <h3>3. Inspection Photos (Mandatory)</h3>
-    <div class="photo-grid">
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Front View *</label>
-        <input type="file" name="img_front" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Back View *</label>
-        <input type="file" name="img_back" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>CR Copy *</label>
-        <input type="file" name="img_cr" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Chassis Plate *</label>
-        <input type="file" name="img_chassis" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Engine Bay *</label>
-        <input type="file" name="img_engine" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Meter (Mileage) *</label>
-        <input type="file" name="img_meter" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Inspection Sheet *</label>
-        <input type="file" name="img_sheet" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Inside/Interior (Opt)</label>
-        <input type="file" name="img_inside" accept="image/*" onchange="previewImage(this)">
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Tyre Condition (Opt)</label>
-        <input type="file" name="img_tyre" accept="image/*" onchange="previewImage(this)">
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Customer w/ Vehicle *</label>
-        <input type="file" name="img_customer" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-      <div class="photo-box">
-        <span class="clear-btn" onclick="clearImage(this)">×</span>
-        <label>Officer w/ Vehicle *</label>
-        <input type="file" name="img_officer" accept="image/*" onchange="previewImage(this)" required>
-      </div>
-    </div>
-
-    <button type="submit" id="submitBtn" class="submit-btn">Submit Request</button>
-  </form>
-  
-  <div class="loader" id="loader"></div>
-  <div id="status"></div>
-</div>
+  </div>
 
 <script>
   // ==========================================
-  // මෙතනට ඔයාගේ අලුත් API URL එක දාන්න!
+  // මෙතනට ඔයාගේ API URL එක දාන්න අමතක කරන්න එපා!
   // ==========================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbwJFRegsb-nPF7hps3aCIrAvs2Wu7v35mfWgcPY5N2P3K2c4bx9pH5VJAF9HpcBPOBS/exec"; 
+  const API_URL = "https://script.google.com/macros/s/AKfycbwGUYpSXgx8uqNTjEFXXuJ71C76fFWFftr_gidqXwD73Wd0MP3M5MOhdeERHsMHSfE2/exec"; 
 
   let allData = [];
+  let loggedInUserEmail = "unknown-user@tdt.lk";
 
-  window.onload = function() {
+  // --- Login Logic ---
+  async function doLogin() {
+    const u = document.getElementById('uname').value;
+    const p = document.getElementById('pwd').value;
+    const btn = document.getElementById('loginBtn');
+    const err = document.getElementById('loginError');
+    
+    if(!u || !p) return;
+    btn.innerText = "Checking...";
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(API_URL + `?action=checkLogin&username=${u}&password=${p}`);
+      const json = await res.json();
+      
+      if (json.success && json.data.valid) {
+        loggedInUserEmail = json.data.email || u; 
+        document.getElementById('welcomeMsg').innerText = "👤 Logged in as: " + u;
+        
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('form-section').style.display = 'block';
+        
+        // ලොග් වුණාට පස්සේ තමයි වාහන විස්තර ටික Load කරන්නේ
+        loadVehicleData();
+      } else {
+        err.style.display = "block";
+        btn.innerText = "Login to Request Form";
+        btn.disabled = false;
+      }
+    } catch (e) {
+      err.innerText = "Connection Error!";
+      err.style.display = "block";
+      btn.innerText = "Login to Request Form";
+      btn.disabled = false;
+    }
+  }
+
+  // --- Load Dropdown Data ---
+  function loadVehicleData() {
     fetch(API_URL + "?action=getVehicleData")
       .then(res => res.json())
       .then(response => {
@@ -147,11 +167,12 @@
           const types = [...new Set(allData.map(item => item[0]))]; 
           types.forEach(t => typeSelect.add(new Option(t, t)));
         } else {
-          alert("Error loading data!");
+          alert("Error loading vehicle data!");
         }
       });
-  };
+  }
 
+  // --- Dynamic Dropdowns ---
   function updateMake() { 
     const type = document.getElementById('vType').value;
     const makeSelect = document.getElementById('make');
@@ -178,6 +199,7 @@
     } else { modelSelect.disabled = true; }
   }
 
+  // --- Image Handling ---
   function previewImage(input) {
     const clearBtn = input.parentElement.querySelector('.clear-btn');
     if (input.files && input.files[0]) {
@@ -231,13 +253,11 @@
       body: JSON.stringify({ action: "uploadImage", data: imageObj })
     });
     const resData = await response.json();
-    if(resData.success) {
-      return { success: true, key: resData.result.key, url: resData.result.url };
-    } else {
-      return { success: false, error: resData.error };
-    }
+    if(resData.success) { return { success: true, key: resData.result.key, url: resData.result.url }; } 
+    else { return { success: false, error: resData.error }; }
   }
 
+  // --- Form Submission ---
   document.getElementById('vForm').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
@@ -252,7 +272,9 @@
     const fileInputs = e.target.querySelectorAll('input[type="file"]');
     
     for (const input of textInputs) { formData[input.name] = input.value; }
-    formData.requesterEmail = "unknown-user@tdt.lk";
+    
+    // ලොග් වුණ කෙනාගේ Email එක තමයි මෙතන සේව් වෙන්නේ
+    formData.requesterEmail = loggedInUserEmail;
 
     let filesToUpload = [];
     for (const input of fileInputs) {
