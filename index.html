@@ -107,7 +107,7 @@
       <input type="password" id="newPwd2" placeholder="Confirm New Password" required>
       
       <button onclick="saveNewPassword()" id="updatePwdBtn" style="background:#e67e22;">Update & Continue</button>
-      <button onclick="location.reload()" style="background:#bdc3c7; color:#333;">Cancel (Logout)</button>
+      <button onclick="logout()" style="background:#bdc3c7; color:#333;">Cancel (Logout)</button>
       <div id="pwdUpdateError" style="color:red; margin-top:10px; font-weight:bold; display:none;"></div>
     </div>
   </div>
@@ -118,7 +118,7 @@
       <div class="nav-tabs" id="nav-tabs"></div>
       <div>
         <span id="welcomeMsg" style="margin-right:20px; font-weight:bold;"></span>
-        <button class="btn-logout" onclick="location.reload()">Logout</button>
+        <button class="btn-logout" onclick="logout()">Logout</button>
       </div>
     </div>
 
@@ -242,6 +242,27 @@
   let currentUser = { username: "", role: "", email: "", firstLogin: false };
   let allData = [];
 
+  // --- 0. CHECK SAVED LOGIN ON PAGE LOAD ---
+  window.onload = function() {
+    const savedUser = localStorage.getItem('tdt_user');
+    if (savedUser) {
+      currentUser = JSON.parse(savedUser);
+      document.getElementById('login-section').style.display = 'none';
+      
+      if (currentUser.firstLogin) {
+        document.getElementById('force-pwd-section').style.display = 'flex';
+      } else {
+        proceedToApp();
+      }
+    }
+  };
+
+  // Logout Function
+  function logout() {
+    localStorage.removeItem('tdt_user'); // Saved session එක මකනවා
+    location.reload(); // Page එක මුලටම රීලෝඩ් කරනවා
+  }
+
   // --- 1. LOGIN & NAVIGATION ---
   async function doLogin() {
     const u = document.getElementById('uname').value;
@@ -256,9 +277,11 @@
       
       if (json.success && json.data.valid) {
         currentUser = json.data;
+        // ලොග් වුණ ගමන් Local Storage එකේ Save කරනවා
+        localStorage.setItem('tdt_user', JSON.stringify(currentUser));
+        
         document.getElementById('login-section').style.display = 'none';
         
-        // අලුත් කෙනෙක්ද චෙක් කරනවා
         if (currentUser.firstLogin) {
           document.getElementById('force-pwd-section').style.display = 'flex';
         } else {
@@ -293,7 +316,10 @@
       const json = await res.json();
       
       if(json.success) {
-        // Password එක වෙනස් කරාට පස්සේ Dashboard එකට යනවා
+        // Password එක හරි ගියාම Local Storage එකත් Update කරනවා
+        currentUser.firstLogin = false;
+        localStorage.setItem('tdt_user', JSON.stringify(currentUser));
+
         document.getElementById('force-pwd-section').style.display = 'none';
         proceedToApp();
       } else {
