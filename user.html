@@ -37,6 +37,17 @@
     .photo-box label{font-size:11px;margin-bottom:3px;background:rgba(255,255,255,0.85);padding:2px 5px;border-radius:4px;z-index:2;pointer-events:none;font-weight:bold;color:#333}
     .photo-box input[type="file"]{font-size:11px;padding:5px;z-index:2;width:90%;background:rgba(255,255,255,0.8);border-radius:4px;margin-top:5px}
     .clear-btn{position:absolute;top:5px;right:5px;background:rgba(220,53,69,0.9);color:white;width:22px;height:22px;border-radius:50%;font-weight:bold;font-size:14px;cursor:pointer;display:none;z-index:10;line-height:20px;text-align:center;border:1px solid white}
+    
+    /* Photo Grid & Zoom Modal CSS (NEW) */
+    .admin-photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;}
+    .admin-photo-item { background: #000; border-radius: 8px; overflow: hidden; border: 2px solid #ddd; text-align: center; cursor: pointer; position: relative;}
+    .admin-photo-item img { width: 100%; height: 200px; object-fit: contain; background: #333; }
+    .admin-photo-label { background: #eee; padding: 8px; font-weight: bold; font-size: 12px; color: #333; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow: hidden; cursor: grab; }
+    .modal-content-container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+    .modal-content { max-width: 95%; max-height: 95vh; box-shadow: 0 5px 35px rgba(0,0,0,0.5); transform-origin: center; cursor: zoom-in; }
+    .close-btn { position: absolute; top: 15px; right: 30px; color: white; font-size: 50px; font-weight: bold; cursor: pointer; z-index: 1100; }
+    .rotate-btn { position: absolute; top: 25px; right: 90px; background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; z-index: 1100; font-weight: bold; border: 1px solid white;}
   </style>
 </head>
 <body style="display:none;" id="main-body">
@@ -109,9 +120,25 @@
     </div>
   </div>
 
+  <div id="imgModal" class="modal" style="z-index: 2500;">
+    <button class="rotate-btn" onclick="rotateImage(event)">↻ Rotate</button><span class="close-btn" onclick="closeModal()">×</span>
+    <div class="modal-content-container" id="modalContainer"><img class="modal-content" id="fullImage"></div>
+  </div>
+
+  <div id="recordViewModal" class="modal" style="background: rgba(0,0,0,0.8); z-index: 2000;">
+    <div style="display: flex; justify-content: center; align-items: center; height: 100%; padding: 20px;">
+      <div style="background: white; padding: 30px; border-radius: 15px; width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: default;">
+        <span onclick="closeRecordView()" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #7f8c8d;">×</span>
+        <h2 style="margin-top: 0; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px;">📋 Valuation Details</h2>
+        <div id="recordDetailsContent" style="line-height: 1.6; font-size: 15px; color: #34495e;">
+          </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbw7ioFVJRDgRcojAi_BkwK1w-rY_yck-cbwd9umvIhGJQhd4aO5KCzdHB1xOAYq7kR4/exec"; 
-  let currentUser = null, allData = [];
+  let currentUser = null, allData = [], globalRecentData = []; // NEW variable
 
   window.onload = function() {
     const saved = localStorage.getItem('tdt_user');
@@ -138,8 +165,75 @@
       .then(r => r.json()).then(res => {
         let tbody = document.getElementById('summaryTableBody');
         if(!res.data || !res.data.length) { tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>No data found</td></tr>"; return; }
-        tbody.innerHTML = res.data.map(r => `<tr><td>${r.date}</td><td><strong>${r.vehNo}</strong></td><td>${r.makeModel}</td><td>${r.marketVal ? Number(r.marketVal).toLocaleString() : '-'}</td><td>${r.saleVal ? Number(r.saleVal).toLocaleString() : '-'}</td><td><span class="badge ${r.status === 'Approved' ? 'bg-approved' : 'bg-pending'}">${r.status}</span></td><td>${(r.pdf && r.pdf !== "No Image") ? `<a href="${r.pdf}" target="_blank" class="btn-view">PDF</a>` : '-'}</td></tr>`).join('');
+        
+        globalRecentData = res.data; // Save data for Popup
+
+        tbody.innerHTML = res.data.map((r, index) => `
+          <tr>
+            <td>${r.date}</td>
+            <td><strong>${r.vehNo}</strong></td>
+            <td>${r.makeModel}</td>
+            <td>${r.marketVal ? Number(r.marketVal).toLocaleString() : '-'}</td>
+            <td>${r.saleVal ? Number(r.saleVal).toLocaleString() : '-'}</td>
+            <td><span class="badge ${r.status === 'Approved' ? 'bg-approved' : (r.status === 'Rejected' ? 'bg-rejected' : 'bg-pending')}">${r.status}</span></td>
+            <td>
+              <button onclick="viewRecordDetails(${index})" class="btn-view" style="background:#f39c12; border:none; cursor:pointer; margin-right:5px;">View</button>
+              ${(r.pdf && r.pdf !== "No Image") ? `<a href="${r.pdf}" target="_blank" class="btn-view" style="text-decoration:none;">PDF</a>` : ''}
+            </td>
+          </tr>`).join('');
       });
+  }
+
+  // NEW: Functions for the View Details Popup
+  function viewRecordDetails(index) {
+    const r = globalRecentData[index];
+    const mVal = r.marketVal ? Number(r.marketVal).toLocaleString() : 'Pending';
+    const sVal = r.saleVal ? Number(r.saleVal).toLocaleString() : 'Pending';
+    const amt = r.reqAmt ? Number(r.reqAmt).toLocaleString() : '-';
+    
+    const photosHtml = `
+      <div class="admin-photo-grid" style="grid-template-columns: 1fr 1fr; margin-top: 15px; gap: 15px;">
+        ${renderPhoto(r.imgFront, 'FRONT')} ${renderPhoto(r.imgBack, 'REAR')} 
+        ${renderPhoto(r.imgCr, 'CR DOCUMENT')} ${renderPhoto(r.imgChassis, 'CHASSIS PLATE')} 
+        ${renderPhoto(r.imgEngine, 'ENGINE')} ${renderPhoto(r.imgMeter, 'SPEEDO METER')} 
+        ${renderPhoto(r.imgSheet, 'INSPECTION')} ${renderPhoto(r.imgInside, 'INTERIOR')} 
+        ${renderPhoto(r.imgCustomer, 'CUSTOMER')} ${renderPhoto(r.imgOfficer, 'OFFICER')}
+      </div>
+    `;
+
+    document.getElementById('recordDetailsContent').innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e1e8ed;">
+          <p style="margin: 5px 0;"><strong>Vehicle No:</strong> <span style="color:#e74c3c; font-weight:bold; font-size:16px;">${r.vehNo}</span></p>
+          <p style="margin: 5px 0;"><strong>Make & Model:</strong> ${r.makeModel}</p>
+          <p style="margin: 5px 0;"><strong>YOM:</strong> ${r.yom}</p>
+          <p style="margin: 5px 0;"><strong>Chassis:</strong> ${r.chassis || '-'}</p>
+          <p style="margin: 5px 0;"><strong>Engine:</strong> ${r.engine || '-'}</p>
+        </div>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e1e8ed;">
+          <p style="margin: 5px 0;"><strong>Req. Amount:</strong> Rs. ${amt}</p>
+          <p style="margin: 5px 0;"><strong>Market Value:</strong> Rs. <span style="color:#27ae60; font-weight:bold;">${mVal}</span></p>
+          <p style="margin: 5px 0;"><strong>Sale Value:</strong> Rs. <span style="color:#2980b9; font-weight:bold;">${sVal}</span></p>
+          <p style="margin: 5px 0;"><strong>Status:</strong> ${r.status}</p>
+          <p style="margin: 5px 0;"><strong>Remarks:</strong> ${r.adminRemarks || 'N/A'}</p>
+        </div>
+      </div>
+      <h3 style="color: #2c3e50; border-top: 2px solid #eee; padding-top: 15px; margin-bottom: 0;">📸 Attached Photos</h3>
+      <p style="font-size: 12px; color: #7f8c8d; margin-top: 0;">(Click on any image to zoom and rotate)</p>
+      ${photosHtml}
+    `;
+    
+    document.getElementById('recordViewModal').style.display = 'block';
+  }
+
+  function closeRecordView() {
+    document.getElementById('recordViewModal').style.display = 'none';
+  }
+  
+  function renderPhoto(url, label) {
+    if (!url || url.includes("No Image")) return ""; let directUrl = url;
+    if (url.includes("drive.google.com")) { let id = url.includes("id=") ? url.split("id=")[1].split("&")[0] : url.split("/d/")[1].split("/")[0]; directUrl = "https://lh3.googleusercontent.com/d/" + id; }
+    return `<div class="admin-photo-item" onclick="openModal('${directUrl}')"><img src="${directUrl}"><div class="admin-photo-label">${label}</div></div>`;
   }
 
   function findVeh() {
@@ -173,6 +267,19 @@
     try { const saveResponse = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ action: "submitForm", data: formData }) }); const saveResult = await saveResponse.json(); if(saveResult.success) { status.innerText = saveResult.result; status.style.color = "green"; e.target.reset(); document.querySelectorAll('.photo-box').forEach(box => box.style.backgroundImage = 'none'); loadDashboardData(); } else { status.innerText = "Error: " + saveResult.error; status.style.color = "red"; } } catch(err) { status.innerText = "Connection Error!"; status.style.color = "red"; }
     btn.disabled = false;
   };
+
+  // NEW: Zoom Modal Logic
+  var modal = document.getElementById("imgModal"), img = document.getElementById("fullImage"), container = document.getElementById("modalContainer");
+  var scale = 1, rotateDeg = 0, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
+  function openModal(src) { modal.style.display = "block"; img.src = src; scale = 1; rotateDeg = 0; pointX = 0; pointY = 0; updateTransform(); document.body.style.overflow="hidden"; }
+  function closeModal() { modal.style.display = "none"; img.src = ""; document.body.style.overflow="auto"; }
+  function rotateImage(e) { e.stopPropagation(); rotateDeg += 90; if (rotateDeg >= 360) rotateDeg = 0; if(scale<1) scale=1; updateTransform(); }
+  function updateTransform() { img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale}) rotate(${rotateDeg}deg)`; }
+  container.onwheel = function(e) { e.preventDefault(); var delta = -e.deltaY; if (delta > 0) scale = Math.min(scale + 0.15, 5); else scale = Math.max(scale - 0.15, 1); if (scale === 1) { pointX = 0; pointY = 0; } updateTransform(); }
+  container.onmousedown = function(e) { if(e.target !== img && e.target !== container) return; if(scale <= 1) return; e.preventDefault(); startX = e.clientX - pointX; startY = e.clientY - pointY; panning = true; modal.style.cursor = "grabbing"; }
+  window.onmouseup = function() { if(!panning) return; panning = false; modal.style.cursor = "grab"; }
+  container.onmousemove = function(e) { if(!panning) return; pointX = e.clientX - startX; pointY = e.clientY - startY; updateTransform(); }
+  window.addEventListener('keydown', function(e) { if(modal.style.display==="block" && e.key==="Escape") closeModal(); });
 </script>
 </body>
 </html>
