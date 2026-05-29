@@ -96,9 +96,21 @@
     <div class="modal-content-container" id="modalContainer"><img class="modal-content" id="fullImage"></div>
   </div>
 
+  <div id="recordViewModal" class="modal" style="background: rgba(0,0,0,0.8); z-index: 2000;">
+    <div style="display: flex; justify-content: center; align-items: center; height: 100%; padding: 20px;">
+      <div style="background: white; padding: 30px; border-radius: 15px; width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: default;">
+        <span onclick="closeRecordView()" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #7f8c8d;">&times;</span>
+        <h2 style="margin-top: 0; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px;">📋 Valuation Details</h2>
+        <div id="recordDetailsContent" style="line-height: 1.6; font-size: 15px; color: #34495e;">
+          </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbw7ioFVJRDgRcojAi_BkwK1w-rY_yck-cbwd9umvIhGJQhd4aO5KCzdHB1xOAYq7kR4/exec"; 
   let currentUser = null;
+  let globalRecentData = []; // NEW variable to store recent data
 
   window.onload = function() {
     const saved = localStorage.getItem('tdt_user');
@@ -112,6 +124,7 @@
   };
 
   function logout() { localStorage.removeItem('tdt_user'); window.location.href = 'index.html'; }
+  
   function switchTab(viewId, btnEl) {
     document.querySelectorAll('.dashboard-container').forEach(el => el.style.display = 'none');
     document.getElementById(viewId).style.display = 'block';
@@ -120,13 +133,79 @@
 
   function loadDashboardData() {
     fetch(`${API_URL}?action=getDashboardStats&role=${currentUser.role}&email=${currentUser.email}`)
-      .then(r => r.json()).then(res => { document.getElementById('tAll').innerText = res.data.total; document.getElementById('tPend').innerText = res.data.pending; document.getElementById('tAppr').innerText = res.data.approved; });
+      .then(r => r.json()).then(res => { 
+        document.getElementById('tAll').innerText = res.data.total; 
+        document.getElementById('tPend').innerText = res.data.pending; 
+        document.getElementById('tAppr').innerText = res.data.approved; 
+      });
+
     fetch(`${API_URL}?action=getRecentSummaryTable&role=${currentUser.role}&email=${currentUser.email}`)
       .then(r => r.json()).then(res => {
         let tbody = document.getElementById('summaryTableBody');
         if(!res.data || !res.data.length) { tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>No data found</td></tr>"; return; }
-        tbody.innerHTML = res.data.map(r => `<tr><td>${r.date}</td><td><strong>${r.vehNo}</strong></td><td>${r.makeModel}</td><td>${r.marketVal ? Number(r.marketVal).toLocaleString() : '-'}</td><td>${r.saleVal ? Number(r.saleVal).toLocaleString() : '-'}</td><td><span class="badge ${r.status === 'Approved' ? 'bg-approved' : 'bg-pending'}">${r.status}</span></td><td>${(r.pdf && r.pdf !== "No Image") ? `<a href="${r.pdf}" target="_blank" class="btn-view">PDF</a>` : '-'}</td></tr>`).join('');
+        
+        globalRecentData = res.data; // Saving data for View popup
+
+        tbody.innerHTML = res.data.map((r, index) => `
+          <tr>
+            <td>${r.date}</td>
+            <td><strong>${r.vehNo}</strong></td>
+            <td>${r.makeModel}</td>
+            <td>${r.marketVal ? Number(r.marketVal).toLocaleString() : '-'}</td>
+            <td>${r.saleVal ? Number(r.saleVal).toLocaleString() : '-'}</td>
+            <td><span class="badge ${r.status === 'Approved' ? 'bg-approved' : (r.status === 'Rejected' ? 'bg-rejected' : 'bg-pending')}">${r.status}</span></td>
+            <td>
+              <button onclick="viewRecordDetails(${index})" class="btn-view" style="background:#f39c12; border:none; cursor:pointer; margin-right:5px;">View</button>
+              ${(r.pdf && r.pdf !== "No Image") ? `<a href="${r.pdf}" target="_blank" class="btn-view" style="text-decoration:none;">PDF</a>` : ''}
+            </td>
+          </tr>`).join('');
       });
+  }
+
+  // NEW: Functions for the View Details Popup
+  function viewRecordDetails(index) {
+    const r = globalRecentData[index];
+    const mVal = r.marketVal ? Number(r.marketVal).toLocaleString() : 'Pending';
+    const sVal = r.saleVal ? Number(r.saleVal).toLocaleString() : 'Pending';
+    const amt = r.reqAmt ? Number(r.reqAmt).toLocaleString() : '-';
+    
+    const photosHtml = `
+      <div class="admin-photo-grid" style="grid-template-columns: 1fr 1fr; margin-top: 15px; gap: 15px;">
+        ${renderPhoto(r.imgFront, 'FRONT')} ${renderPhoto(r.imgBack, 'REAR')} 
+        ${renderPhoto(r.imgCr, 'CR DOCUMENT')} ${renderPhoto(r.imgChassis, 'CHASSIS PLATE')} 
+        ${renderPhoto(r.imgEngine, 'ENGINE')} ${renderPhoto(r.imgMeter, 'SPEEDO METER')} 
+        ${renderPhoto(r.imgSheet, 'INSPECTION')} ${renderPhoto(r.imgInside, 'INTERIOR')} 
+        ${renderPhoto(r.imgCustomer, 'CUSTOMER')} ${renderPhoto(r.imgOfficer, 'OFFICER')}
+      </div>
+    `;
+
+    document.getElementById('recordDetailsContent').innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e1e8ed;">
+          <p style="margin: 5px 0;"><strong>Vehicle No:</strong> <span style="color:#e74c3c; font-weight:bold; font-size:16px;">${r.vehNo}</span></p>
+          <p style="margin: 5px 0;"><strong>Make & Model:</strong> ${r.makeModel}</p>
+          <p style="margin: 5px 0;"><strong>YOM:</strong> ${r.yom}</p>
+          <p style="margin: 5px 0;"><strong>Chassis:</strong> ${r.chassis || '-'}</p>
+          <p style="margin: 5px 0;"><strong>Engine:</strong> ${r.engine || '-'}</p>
+        </div>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e1e8ed;">
+          <p style="margin: 5px 0;"><strong>Req. Amount:</strong> Rs. ${amt}</p>
+          <p style="margin: 5px 0;"><strong>Market Value:</strong> Rs. <span style="color:#27ae60; font-weight:bold;">${mVal}</span></p>
+          <p style="margin: 5px 0;"><strong>Sale Value:</strong> Rs. <span style="color:#2980b9; font-weight:bold;">${sVal}</span></p>
+          <p style="margin: 5px 0;"><strong>Status:</strong> ${r.status}</p>
+          <p style="margin: 5px 0;"><strong>Remarks:</strong> ${r.adminRemarks || 'N/A'}</p>
+        </div>
+      </div>
+      <h3 style="color: #2c3e50; border-top: 2px solid #eee; padding-top: 15px; margin-bottom: 0;">📸 Attached Photos</h3>
+      <p style="font-size: 12px; color: #7f8c8d; margin-top: 0;">(Click on any image to zoom and rotate)</p>
+      ${photosHtml}
+    `;
+    
+    document.getElementById('recordViewModal').style.display = 'block';
+  }
+
+  function closeRecordView() {
+    document.getElementById('recordViewModal').style.display = 'none';
   }
 
   function findVeh() {
@@ -177,6 +256,7 @@
     if (url.includes("drive.google.com")) { let id = url.includes("id=") ? url.split("id=")[1].split("&")[0] : url.split("/d/")[1].split("/")[0]; directUrl = "https://lh3.googleusercontent.com/d/" + id; }
     return `<div class="admin-photo-item" onclick="openModal('${directUrl}')"><img src="${directUrl}"><div class="admin-photo-label">${label}</div></div>`;
   }
+  
   function formatInput(el) { let val = el.value.replace(/[^0-9]/g, ''); if (val) el.value = Number(val).toLocaleString('en-US'); }
   function cleanNum(str) { return str ? str.replace(/,/g, '') : "0"; }
 
