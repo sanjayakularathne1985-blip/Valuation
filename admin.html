@@ -91,7 +91,7 @@
     <div id="admin-req-list">Loading...</div>
   </div>
 
-  <div id="imgModal" class="modal">
+  <div id="imgModal" class="modal" style="z-index: 2500;">
     <button class="rotate-btn" onclick="rotateImage(event)">↻ Rotate</button><span class="close-btn" onclick="closeModal()">×</span>
     <div class="modal-content-container" id="modalContainer"><img class="modal-content" id="fullImage"></div>
   </div>
@@ -99,7 +99,7 @@
   <div id="recordViewModal" class="modal" style="background: rgba(0,0,0,0.8); z-index: 2000;">
     <div style="display: flex; justify-content: center; align-items: center; height: 100%; padding: 20px;">
       <div style="background: white; padding: 30px; border-radius: 15px; width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: default;">
-        <span onclick="closeRecordView()" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #7f8c8d;">&times;</span>
+        <span onclick="closeRecordView()" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #7f8c8d;">×</span>
         <h2 style="margin-top: 0; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px;">📋 Valuation Details</h2>
         <div id="recordDetailsContent" style="line-height: 1.6; font-size: 15px; color: #34495e;">
           </div>
@@ -162,7 +162,6 @@
       });
   }
 
-  // NEW: Functions for the View Details Popup
   function viewRecordDetails(index) {
     const r = globalRecentData[index];
     const mVal = r.marketVal ? Number(r.marketVal).toLocaleString() : 'Pending';
