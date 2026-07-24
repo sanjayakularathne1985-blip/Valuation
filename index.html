@@ -436,7 +436,7 @@
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Engine Bay *</label><input type="file" name="img_engine" accept="image/*,application/pdf" onchange="previewImage(this)" required></div>
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Meter *</label><input type="file" name="img_meter" accept="image/*,application/pdf" onchange="previewImage(this)" required></div>
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Inspection Sheet *</label><input type="file" name="img_sheet" accept="image/*,application/pdf" onchange="previewImage(this)" required></div>
-                <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Inside Interior</label><input type="file" name="img_inside" accept="image/*,application/pdf" onchange="previewImage(this)"></div>
+                <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Office View</label><input type="file" name="img_inside" accept="image/*,application/pdf" onchange="previewImage(this)"></div>
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Tyre Condition</label><input type="file" name="img_tyre" accept="image/*,application/pdf" onchange="previewImage(this)"></div>
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Customer View</label><input type="file" name="img_customer" accept="image/*,application/pdf" onchange="previewImage(this)"></div>
               </div>
@@ -1405,7 +1405,7 @@
           if(req.imgEngine !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgEngine)}')"><img src="${getImgUrl(req.imgEngine)}" onerror="${errImg}"><div class="admin-photo-label">Engine</div></div>`;
           if(req.imgMeter !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgMeter)}')"><img src="${getImgUrl(req.imgMeter)}" onerror="${errImg}"><div class="admin-photo-label">Meter</div></div>`;
           if(req.imgSheet !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgSheet)}')"><img src="${getImgUrl(req.imgSheet)}" onerror="${errImg}"><div class="admin-photo-label">Inspection Sheet</div></div>`;
-          if(req.imgInside !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgInside)}')"><img src="${getImgUrl(req.imgInside)}" onerror="${errImg}"><div class="admin-photo-label">Inside Interior</div></div>`;
+          if(req.imgInside !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgInside)}')"><img src="${getImgUrl(req.imgInside)}" onerror="${errImg}"><div class="admin-photo-label">Office View</div></div>`;
           if(req.imgTyre !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgTyre)}')"><img src="${getImgUrl(req.imgTyre)}" onerror="${errImg}"><div class="admin-photo-label">Tyre Condition</div></div>`;
           if(req.imgCustomer !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgCustomer)}')"><img src="${getImgUrl(req.imgCustomer)}" onerror="${errImg}"><div class="admin-photo-label">Customer View</div></div>`;
 
