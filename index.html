@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Test Portal</title>
+  <title>Trade Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -120,7 +120,7 @@
     <header class="top-header">
       <div class="brand" style="display: flex; align-items: center; gap: 15px; font-weight: bold;">
         <i class="fas fa-bars" onclick="toggleSidebar()" style="cursor: pointer; font-size: 20px; color: var(--accent-red-light);"></i>
-        Test Portal
+        Trade Portal
       </div>
       <div class="header-right">
         <div class="user-profile">
@@ -664,7 +664,7 @@
 
     window.onload = function() {
       try {
-        var savedUser = localStorage.getItem('TestAppUser');
+        var savedUser = localStorage.getItem('TradeAppUser');
         if(savedUser) { 
           var parsedUser = JSON.parse(savedUser); 
           if(parsedUser && parsedUser.user) {
@@ -722,7 +722,7 @@
     }
 
     function proceedToDashboard(userData) {
-      localStorage.setItem('TestAppUser', JSON.stringify(userData)); currentUser = userData;
+      localStorage.setItem('TradeAppUser', JSON.stringify(userData)); currentUser = userData;
       document.getElementById('login-container').style.display = 'none'; document.getElementById('app-container').style.display = 'flex';
       setupDashboardPostLogin(currentUser);
     }
@@ -1043,7 +1043,7 @@
       for (var i = 1; i < tr.length; i++) {
         var tdDate = tr[i].getElementsByTagName("td")[0]; var tdId = tr[i].getElementsByTagName("td")[1]; var tdVeh = tr[i].getElementsByTagName("td")[2]; var tdStatus = tr[i].getElementsByTagName("td")[5]; 
         if (tdDate && tdId && tdVeh && tdStatus) {
-          var rowDateStr = tdDate.textContent || tdDate.innerText; var rowDate = new Date(rowDateStr.split(" ")[0]);
+          var rowDaTrader = tdDate.textContent || tdDate.innerText; var rowDate = new Date(rowDaTrader.split(" ")[0]);
           var matchSearch = (tdId.innerText.toLowerCase().indexOf(input) > -1) || (tdVeh.innerText.toLowerCase().indexOf(input) > -1);
           var matchStatus = (status === "" || status === "all statuses" || tdStatus.innerText.toLowerCase().indexOf(status) > -1);
           var matchDate = true;
@@ -1157,7 +1157,7 @@
     }
 
     function logout() { 
-      try { localStorage.removeItem('TestAppUser'); } catch(e){}
+      try { localStorage.removeItem('TradeAppUser'); } catch(e){}
       currentUser = {}; document.getElementById('app-container').style.display = 'none'; document.getElementById('login-container').style.display = 'flex'; document.getElementById('username').value = ""; document.getElementById('password').value = "";
     }
 
@@ -1455,7 +1455,7 @@
       for (var i = 1; i < tr.length; i++) {
         var tdDate = tr[i].getElementsByTagName("td")[0]; var tdVeh = tr[i].getElementsByTagName("td")[2];
         if (tdDate && tdVeh) {
-          var rowDateStr = tdDate.textContent || tdDate.innerText; var rowDate = new Date(rowDateStr); var matchSearch = tdVeh.innerText.toLowerCase().indexOf(search) > -1; var matchDate = true;
+          var rowDaTrader = tdDate.textContent || tdDate.innerText; var rowDate = new Date(rowDaTrader); var matchSearch = tdVeh.innerText.toLowerCase().indexOf(search) > -1; var matchDate = true;
           if (fDate) { if (rowDate < new Date(fDate)) matchDate = false; }
           if (tDate) { var toDateObj = new Date(tDate); toDateObj.setHours(23, 59, 59, 999); if (rowDate > toDateObj) matchDate = false; }
           tr[i].style.display = (matchSearch && matchDate) ? "" : "none";
@@ -1473,7 +1473,7 @@
             for (var i = 0; i < tr.length; i++) {
                 var tds = tr[i].getElementsByTagName("td");
                 if (tds.length > 1) { 
-                    var rowDateStr = tds[tbl.dateCol].textContent || tds[tbl.dateCol].innerText; var rowDate = new Date(rowDateStr.split(" ")[0]); var matchSearch = false;
+                    var rowDaTrader = tds[tbl.dateCol].textContent || tds[tbl.dateCol].innerText; var rowDate = new Date(rowDaTrader.split(" ")[0]); var matchSearch = false;
                     tbl.searchCols.forEach(colIdx => { if (tds[colIdx] && tds[colIdx].innerText.toLowerCase().indexOf(search) > -1) { matchSearch = true; } });
                     var matchDate = true; if (fDate) { if (rowDate < new Date(fDate)) matchDate = false; } if (tDate) { var toDateObj = new Date(tDate); toDateObj.setHours(23, 59, 59, 999); if (rowDate > toDateObj) matchDate = false; }
                     tr[i].style.display = (matchSearch && matchDate) ? "" : "none";
@@ -1489,7 +1489,7 @@
         for (var i = 1; i < tr.length; i++) {
             var tdDate = tr[i].getElementsByTagName("td")[0]; var tdId = tr[i].getElementsByTagName("td")[1]; var tdVeh = tr[i].getElementsByTagName("td")[4]; var tdStatus = tr[i].getElementsByTagName("td")[5];
             if (tdDate && tdId && tdVeh && tdStatus) {
-                var rowDateStr = tdDate.textContent || tdDate.innerText; var rowDate = new Date(rowDateStr.split(" ")[0]);
+                var rowDaTrader = tdDate.textContent || tdDate.innerText; var rowDate = new Date(rowDaTrader.split(" ")[0]);
                 var matchSearch = (tdId.innerText.toLowerCase().indexOf(search) > -1) || (tdVeh.innerText.toLowerCase().indexOf(search) > -1);
                 var matchStatus = (status === "" || status === "all statuses" || tdStatus.innerText.toLowerCase().indexOf(status) > -1); var matchDate = true;
                 if (fDate) { if (rowDate < new Date(fDate)) matchDate = false; } if (tDate) { var toDateObj = new Date(tDate); toDateObj.setHours(23, 59, 59, 999); if (rowDate > toDateObj) matchDate = false; }
