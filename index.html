@@ -2569,7 +2569,7 @@
 
         ctx.fillStyle = "rgba(198, 40, 40, 0.48)";
         ctx.font = "900 23px sans-serif";
-        ctx.fillText(`මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කරු දිනය: ${issueDate}`, offsetX, barY + (barH / 2), barW - 20);
+        ctx.fillText(`මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කල දිනය: ${issueDate}`, offsetX, barY + (barH / 2), barW - 20);
       }
 
       return canvas.toDataURL('image/png');
@@ -2637,7 +2637,7 @@
         let dateFontSize = Math.max(11, Math.floor(fontSize * 0.76));
         ctx.fillStyle = "rgba(198, 40, 40, 0.48)";
         ctx.font = "900 " + dateFontSize + "px sans-serif";
-        ctx.fillText(`මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කරු දිනය: ${issueDate}`, offsetX, barY + (barH / 2), barW * 0.95);
+        ctx.fillText(`මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කල දිනය: ${issueDate}`, offsetX, barY + (barH / 2), barW * 0.95);
       }
       ctx.restore();
     }
@@ -3071,7 +3071,7 @@
 
       Swal.fire({
         title: 'Preparing CR Document...',
-        html: `නිකුත්කරු දිනය (<b>${todayDate}</b>) Watermark එකට එක් කරමින්... ⏳`,
+        html: `නිකුත්කල දිනය (<b>${todayDate}</b>) Watermark එකට එක් කරමින්... ⏳`,
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading()
       });
@@ -3140,7 +3140,7 @@
           document.body.removeChild(a);
         } else {
           document.getElementById('cr_prev_title').innerText = `CR Document - ${vehNo}`;
-          document.getElementById('cr_prev_subtitle').innerText = `මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කරු දිනය: ${todayDate}`;
+          document.getElementById('cr_prev_subtitle').innerText = `මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කල දිනය: ${todayDate}`;
           const dlBtn = document.getElementById('cr_prev_download_btn');
           dlBtn.href = currentCRBlobUrl;
           dlBtn.download = downloadName;
