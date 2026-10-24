@@ -81,43 +81,14 @@
     .form-box label { font-weight:600; font-size:14px; color:#444; margin-bottom:5px; display:block; }
     .form-box input, .form-box select, .form-box textarea { width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:5px; font-size:14px; outline:none; }
     .btn-submit { width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; transition:0.3s; }
-    
-    /* 01 & 02. Freeze Header & Horizontal/Vertical Scroll Solution */
-    .table-container, .rmv-table-scroll { 
-      max-height: 65vh; 
-      overflow-x: auto; 
-      overflow-y: auto; 
-      background: #fff; 
-      border: 1px solid #ddd; 
-      border-radius: 8px; 
-      padding: 0; 
-      margin-bottom: 30px; 
-      position: relative;
-    }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 14px; white-space: nowrap; }
-    th { 
-      padding: 12px; 
-      border-bottom: 2px solid #ddd; 
-      background: #f9f9f9; 
-      color: #333; 
-      font-weight: 600; 
-      position: sticky; 
-      top: 0; 
-      z-index: 20; 
-    }
-    #rmvTable thead th, #rmvStatusTable thead th {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background-color: #2d2d2d !important;
-      color: #fff !important;
-    }
-    td { padding: 12px; border-bottom: 1px solid #eee; color: #555; }
-
+    .table-container { overflow-x:auto; background:#fff; border:1px solid #ddd; border-radius:8px; padding:15px; margin-bottom:30px; }
+    table { width:100%; border-collapse:collapse; text-align:left; font-size:14px; white-space: nowrap; }
+    th { padding:12px; border-bottom:2px solid #ddd; background:#f9f9f9; color:#333; font-weight:600; }
+    td { padding:12px; border-bottom:1px solid #eee; color:#555; }
     .badge-pending { background:#f1c40f; color:#fff; padding:4px 10px; border-radius:15px; font-size:12px; font-weight:bold; }
     .badge-accepted { background:#2ecc71; color:#fff; padding:4px 10px; border-radius:15px; font-size:12px; font-weight:bold; }
     .badge-rejected { background:#e74c3c; color:#fff; padding:4px 10px; border-radius:15px; font-size:12px; font-weight:bold; }
-    .blue-header th { background-color:#2c3e50!important; color:white!important; border-bottom:2px solid #1a252f!important; position: sticky; top: 0; z-index: 20; }
+    .blue-header th { background-color:#2c3e50!important; color:white!important; border-bottom:2px solid #1a252f!important; }
     .photo-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; background:#f1f3f5; padding:15px; border-radius:8px; margin-bottom:20px; }
     .photo-box { background-color:white; padding:10px; border:1px dashed #adb5bd; border-radius:5px; text-align:center; position:relative; height:90px; display:flex; flex-direction:column; justify-content:center; align-items:center; background-repeat:no-repeat; background-position:center; background-size:cover; }
     .photo-box label { font-size:11px; margin-bottom:3px; background:rgba(255,255,255,0.85); padding:2px 5px; border-radius:4px; z-index:2; pointer-events:none; font-weight:bold; color:#333; }
@@ -142,25 +113,39 @@
     .rotate-btn:hover { background: rgba(255,255,255,0.4); }
     .swal2-container { z-index: 99999 !important; }
     
+    /* New Grid style for modules */
     .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;}
 
     /* =============== MOBILE RESPONSIVE STYLES =============== */
     @media (max-width: 768px) {
+      /* Sidebar Overlay */
       .sidebar { position: absolute; height: 100%; z-index: 9999; box-shadow: 2px 0 10px rgba(0,0,0,0.5); }
       .sidebar.closed { width: 0; box-shadow: none; }
+      
+      /* Top Header & Content Area */
       .welcome-text { font-size: 18px; margin-bottom: 15px; }
-      .header-right .user-profile .info { display: none; }
+      .header-right .user-profile .info { display: none; } /* Mobile එකේ ඉඩ ඉතුරු කරන්න නම විතරක් පෙන්වයි */
       .content-area { padding: 15px; }
+
+      /* Cards & Grids to Single Column */
       .admin-cards { flex-direction: column; gap: 10px; }
       .admin-forms-grid { grid-template-columns: 1fr; }
-      .photo-grid { grid-template-columns: 1fr 1fr; }
+      .photo-grid { grid-template-columns: 1fr 1fr; } /* ෆොටෝස් පේළියට 2ක ගාණේ පෙන්නයි */
       .perm-grid { grid-template-columns: 1fr; }
+      
+      /* Override inline grid styles for mobile forms */
       #vForm div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
       #val-view-modal div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+      
+      /* RMV & Valuation View Modal Fix for Mobile */
       #rmv-approval-modal > div > div:nth-child(2) { flex-direction: column !important; overflow-y: auto; }
       #rmv-approval-modal > div > div:nth-child(2) > div:first-child { width: 100% !important; border-right: none !important; border-bottom: 1px solid #ddd; height: auto !important; }
+      
+      /* Filters Area Fix (Search, Date, Clear buttons) */
       .view-section > div[style*="display:flex; gap:15px; margin-bottom:20px; align-items:flex-end;"] { flex-direction: column; gap: 10px !important; align-items: stretch !important; }
       .view-section > div[style*="display:flex; gap:15px; margin-bottom:20px; align-items:flex-end;"] > div { width: 100%; }
+      
+      /* Prevent iOS Auto-zoom on inputs */
       input, select, textarea { font-size: 16px !important; } 
     }
   </style>
@@ -419,6 +404,7 @@
                  </div>
                  
                  <div class="perm-grid">
+                    <!-- Category A: Module Access & Scope -->
                     <div class="perm-box" style="max-height: 550px; overflow-y: auto;">
                        <h4 style="position: sticky; top: 0; background: #f8f9fa; z-index: 10; margin-top:-5px; padding-top:5px;">Module, Feature & Data Scope Access</h4>
                        
@@ -648,8 +634,9 @@
                <div style="flex:1;"><label style="font-size:12px;font-weight:bold;color:#555;">To Date</label><input type="date" id="rmvToDate" onchange="filterRmvTable()" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; outline:none;"></div>
                <div><button onclick="clearRmvFilters()" style="background:#6c757d; color:#fff; padding:10px 20px; border:none; border-radius:4px; cursor:pointer;">Clear</button></div>
              </div>
-             <div class="rmv-table-scroll" style="border: 2px solid #800000; border-radius: 5px;">
-               <table id="rmvTable" style="width:100%; border-collapse:separate; border-spacing:0; text-align:center; font-size:14px; white-space: nowrap;">
+             <!-- overflow: hidden වෙනුවට overflow-x: auto දැම්මා -->
+             <div style="border: 2px solid #800000; border-radius: 5px; overflow-x: auto;">
+               <table id="rmvTable" style="width:100%; border-collapse:collapse; text-align:center; font-size:14px; white-space: nowrap;">
                  <thead style="background:#2d2d2d; color:#fff;"><tr><th>Company</th><th style="padding:15px;">Date & Time</th><th>Request ID</th><th>Vehicle No</th><th>Branch</th><th>Action By</th><th>Status</th><th>Action</th></tr></thead>
                  <tbody></tbody>
                </table>
@@ -681,8 +668,8 @@
                <div style="flex:1; min-width:140px;"><label style="font-size:12px;font-weight:bold;color:#555;">To Date</label><input type="date" id="rmvStatToDate" onchange="filterRmvStatusTable()" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; outline:none;"></div>
                <div><button onclick="clearRmvStatusFilters()" style="background:#6c757d; color:#fff; padding:10px 20px; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Clear</button></div>
              </div>
-             <div class="rmv-table-scroll" style="border: 2px solid #800000; border-radius: 5px;">
-               <table id="rmvStatusTable" style="width:100%; border-collapse:separate; border-spacing:0; text-align:center; font-size:14px; white-space: nowrap;">
+             <div style="border: 2px solid #800000; border-radius: 5px; overflow-x: auto;">
+               <table id="rmvStatusTable" style="width:100%; border-collapse:collapse; text-align:center; font-size:14px; white-space: nowrap;">
                  <thead style="background:#2d2d2d; color:#fff;">
                    <tr>
                      <th style="padding:12px;">Company</th>
@@ -723,11 +710,6 @@
                 <div><label>Engine CC</label><input type="number" name="engCc" required></div>
                 <div><label>Fuel Type</label><select name="fuelType"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
                 <div><label>Req. Amount (LKR)</label><input type="number" name="reqAmount" required></div>
-                <!-- 03. Valuation Request Remark Text Box -->
-                <div style="grid-column: span 2;">
-                  <label>Remarks (විස්තර / සටහන්)</label>
-                  <textarea name="remarks" rows="2" placeholder="විශේෂ සටහන් ඇත්නම් මෙහි ඇතුළත් කරන්න..."></textarea>
-                </div>
               </div>
               <h3 style="color:#28a745; border-left:4px solid #28a745; padding-left:10px; margin-top:20px;">2. Inspection Photos</h3>
               <div class="photo-grid">
@@ -741,9 +723,6 @@
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Office View*</label><input type="file" name="img_inside" accept="image/*" onchange="previewImage(this)" required></div>
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Tyre Condition</label><input type="file" name="img_tyre" accept="image/*" onchange="previewImage(this)"></div>
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Customer View*</label><input type="file" name="img_customer" accept="image/*" onchange="previewImage(this)" required></div>
-                <!-- 04. Other 001 & Other 002 Images -->
-                <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Other 001</label><input type="file" name="img_other1" accept="image/*" onchange="previewImage(this)"></div>
-                <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Other 002</label><input type="file" name="img_other2" accept="image/*" onchange="previewImage(this)"></div>
               </div>
               <button type="submit" id="valSubmitBtn" class="btn-submit">Submit Valuation Request</button>
             </form>
@@ -805,6 +784,7 @@
               <i class="fas fa-cloud-upload-alt"></i> Upload Final CR
             </h2>
 
+            <!-- Option Toggle Buttons -->
             <div style="display: flex; gap: 10px; margin-bottom: 25px;">
               <button type="button" id="btn_cr_mode_val" onclick="switchCRUploadMode('valuation')" style="flex: 1; padding: 12px; border: 2px solid #0d6efd; background: #0d6efd; color: #fff; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s;">
                 <i class="fas fa-check-circle"></i> From Approved Valuations
@@ -820,6 +800,7 @@
               <input type="text" id="cr_search_input" list="pending_cr_list" class="admin-input" placeholder="Type Vehicle No... (e.g., WP CAB-1234)" onchange="loadCRDetails()">
               <datalist id="pending_cr_list"></datalist>
 
+              <!-- Details Section -->
               <div id="cr_details_box" style="display:none; background:#f8f9fa; border:1px solid #ddd; border-radius:8px; padding:20px; margin-bottom:20px;">
                 <h4 style="margin-top:0; color:#333; margin-bottom:15px; border-bottom:1px solid #ccc; padding-bottom:5px;">Valuation Details</h4>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
@@ -833,6 +814,7 @@
                 <input type="hidden" id="cr_row_index">
               </div>
 
+              <!-- Upload Section -->
               <div id="cr_upload_section" style="display:none;">
                 <label>Upload Final CR Document (PDF or Image) *</label>
                 <input type="file" id="final_cr_file" accept=".pdf, image/*" class="admin-input">
@@ -1018,23 +1000,27 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxjYfv0vaxxAc9QTnLodT7l6hGhs7qPXpbPbyXEgH_pjMDRAGcnr5Fp6pWU6V-8I5Pz/exec";
+    // ====== API CONFIGURATION ======
+    const API_URL = "https://script.google.com/macros/s/AKfycbzyHeqWPFwAvisr5MeoUEM3vPe_wlPqRkpt4fDf9Q7WpLPclAXCdHT9G3dHz0j3ry1LNw/exec";
 
     async function apiCall(action, payload = {}, method = 'POST') {
       try {
         let url = API_URL; let options = {};
+        
         if (currentUser && currentUser.role) {
             if (payload.role === undefined) payload.role = currentUser.role; 
             if (payload.company === undefined || payload.company === "") payload.company = currentUser.company; 
             payload.creatorRole = currentUser.role;
             payload.creatorCompany = currentUser.company;
             if (payload.username === undefined) payload.username = currentUser.username || ''; 
+            
             if (payload.data && typeof payload.data === 'object') {
                 if (payload.data.company === undefined || payload.data.company === "") {
                     payload.data.company = currentUser.company;
                 }
             }
         }
+
         if (method === 'GET') {
             const queryParams = new URLSearchParams({ action: action, ...payload });
             url = `${API_URL}?${queryParams.toString()}`;
@@ -1042,16 +1028,21 @@
             options = { method: 'POST', body: JSON.stringify({ action: action, ...payload }) };
         }
         const response = await fetch(url, options); const data = await response.json();
-        if (data.success === false) { throw new Error(data.error || data.msg || "API Error"); }
+        
+        if (data.success === false) {
+           throw new Error(data.error || data.msg || "API Error");
+        }
         return data;
       } catch (error) { console.error("API Call Failed:", error); throw error; }
     }
-
     var currentUser = {}; var rmvMap = null; var mapMarkers = []; var allVehicleData = [];
     var globalRmvData = []; var currentRmvIndex = -1;
     var vehicleDB = []; var tempUserData = null;
-    var globalDashValData = []; var globalHistoryValData = [];
-    var systemUsersData = []; var globalBranchesFull = []; 
+    
+    var globalDashValData = []; 
+    var globalHistoryValData = [];
+    var systemUsersData = []; 
+    var globalBranchesFull = []; 
 
     function getImgUrl(url) {
        if (!url || url === 'No Image') return '';
@@ -1077,6 +1068,8 @@
         }
       } catch(e) { console.error(e); }
     };
+
+    // ====== LOGIN FUNCTIONS ======
 
     async function doLogin() {
       var u = document.getElementById('username').value.trim();
@@ -1134,11 +1127,14 @@
       }
     });
 
+    // ====== APP SETUP ======
+
     function populateUserDatalists(filterCompany) {
       var resetList = document.getElementById('reset-uname'); 
       var permList = document.getElementById('perm-user-list');
       if(resetList) resetList.innerHTML = '';
       if(permList) permList.innerHTML = '';
+      
       systemUsersData.forEach(u => {
           if (filterCompany === 'ALL' || u.company.toLowerCase().trim() === filterCompany.toLowerCase().trim()) {
               if(resetList) resetList.appendChild(new Option(u.username, u.username));
@@ -1158,10 +1154,12 @@
         var select = document.getElementById(dropdownId);
         if(!select) return;
         select.innerHTML = '<option value="">-- Select Branch --</option>';
+        
         var filtered = globalBranchesFull;
         if (companyName && companyName !== 'ALL') {
             filtered = globalBranchesFull.filter(b => b.company.toLowerCase() === companyName.toLowerCase());
         }
+        
         filtered.forEach(b => {
             select.add(new Option(b.branch + " (" + b.company + ")", b.branch));
         });
@@ -1170,18 +1168,23 @@
     function autoFillMoveUser() {
       var u = document.getElementById('move-username').value;
       var uRole = currentUser.role ? currentUser.role.toLowerCase().trim() : "";
+      
       if (!u) {
          document.getElementById('move-company').value = "";
          var comp = uRole === 'system owner' ? '' : currentUser.company;
          filterBranchDropdown(comp, 'move-branch');
          return;
       }
+      
       var selectedUser = systemUsersData.find(user => user.username === u);
       if (selectedUser) {
          document.getElementById('move-company').value = selectedUser.company || "";
          filterBranchDropdown(selectedUser.company || "", 'move-branch');
+         
          if (selectedUser.branch) {
-             setTimeout(() => { document.getElementById('move-branch').value = selectedUser.branch; }, 50);
+             setTimeout(() => {
+                 document.getElementById('move-branch').value = selectedUser.branch;
+             }, 50);
          }
       }
     }
@@ -1190,9 +1193,13 @@
         var select = document.getElementById('target_branch');
         if(!select) return;
         select.innerHTML = '<option value="">-- Select Branch --</option>';
+        
         var uComp = currentUser.company ? currentUser.company.toLowerCase().trim() : "";
         var uRole = currentUser.role ? currentUser.role.toLowerCase().trim() : "";
-        var scope = "OWN"; var assigned = [];
+        
+        // Use the new moduleScopes if available, otherwise default to OWN
+        var scope = "OWN";
+        var assigned = [];
         try {
             if(currentUser.moduleScopes) {
                 var parsedScopes = JSON.parse(currentUser.moduleScopes);
@@ -1211,6 +1218,7 @@
         } catch(e) {}
         
         var filtered = globalBranchesFull;
+        
         if (uRole === 'system owner' || scope === 'ALL_COMPANIES') {
             filtered = globalBranchesFull;
         } else if (scope === 'SELECTED_BRANCH' || scope === 'SELECTED') {
@@ -1223,7 +1231,10 @@
         } else {
             filtered = globalBranchesFull.filter(b => b.company && b.company.trim().toLowerCase() === uComp);
         }
-        filtered.forEach(b => { select.add(new Option(b.branch + " (" + b.company + ")", b.branch)); });
+        
+        filtered.forEach(b => {
+            select.add(new Option(b.branch + " (" + b.company + ")", b.branch));
+        });
     }    
 
     function setupDashboardPostLogin(res) {
@@ -1235,6 +1246,7 @@
 
         document.getElementById('display-name').innerText = uName; 
         var formattedRole = uRole.charAt(0).toUpperCase() + uRole.slice(1);
+        
         document.getElementById('display-role').innerHTML = `<span style="color:#f39c12; font-weight:bold;">${uComp}</span> | ${formattedRole} | ${uBranch}`;
         document.getElementById('welcome-name').innerHTML = `${uName} <span style="font-size:16px; color:#555;">(${uComp})</span> - ${uBranch} Branch`;
         document.getElementById('profile-img').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(uName) + "&background=c62828&color=fff";
@@ -1248,45 +1260,68 @@
             document.querySelector('.branch-form-card').style.display = 'block';
             document.getElementById('template-setup-card').style.display = 'block';
             document.getElementById('move-company').style.display = 'block';
+            
             var optAllComp = document.getElementById('opt_all_comp');
             if (optAllComp) optAllComp.style.display = 'block';
+
             document.querySelectorAll('.opt-selected-company').forEach(opt => {
-                opt.style.display = 'block'; opt.disabled = false; opt.hidden = false;
+                opt.style.display = 'block';
+                opt.disabled = false;
+                opt.hidden = false;
             });
+
             var roleSelect = document.getElementById('new-user-role');
             if (roleSelect) {
                 roleSelect.innerHTML = '<option value="User">User</option><option value="rmv branch">RMV Branch User</option><option value="rmv approval">RMV Request Approval User</option><option value="valuation admin">Valuation Admin</option><option value="super admin">Super Admin</option>';
             }
+            
         } else {
             document.querySelector('.branch-form-card').style.display = 'none';
             document.getElementById('template-setup-card').style.display = 'none';
             document.getElementById('new-user-company').style.display = 'none';
             document.getElementById('move-company').style.display = 'none';
             document.getElementById('perm-company-filter').style.display = 'none';
+            
             var optAllComp = document.getElementById('opt_all_comp');
-            if (optAllComp) { optAllComp.style.display = 'none'; optAllComp.disabled = true; optAllComp.hidden = true; }
+            if (optAllComp) {
+                optAllComp.style.display = 'none';
+                optAllComp.disabled = true;
+                optAllComp.hidden = true;
+            }
+
             document.querySelectorAll('.opt-selected-company').forEach(opt => {
-                opt.style.display = 'none'; opt.disabled = true; opt.hidden = true;
+                opt.style.display = 'none';
+                opt.disabled = true;
+                opt.hidden = true;
                 if(opt.parentNode) opt.parentNode.removeChild(opt); 
             });
+
             var roleSelect = document.getElementById('new-user-role');
-            if (roleSelect) { roleSelect.innerHTML = '<option value="User">User</option>'; }
+            if (roleSelect) {
+                roleSelect.innerHTML = '<option value="User">User</option>';
+            }
         }
 
         apiCall('getCompanyList', {}, 'GET').then(res => {
            if(res.data) {
                let dl = document.getElementById('comp-list');
                if(dl) dl.innerHTML = '';
+               
                let sortedComps = [...res.data].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+               
                sortedComps.forEach(c => {
-                   let opt = document.createElement('option'); opt.value = c;
+                   let opt = document.createElement('option');
+                   opt.value = c;
                    if(dl) dl.appendChild(opt);
                });
+
                var compSelects = document.querySelectorAll('.perm-company-select');
                compSelects.forEach(selectBox => {
                    selectBox.innerHTML = '';
                    sortedComps.forEach(c => selectBox.add(new Option(c, c)));
-                   selectBox.style.height = "auto"; selectBox.style.overflow = "hidden";
+                   
+                   selectBox.style.height = "auto";
+                   selectBox.style.overflow = "hidden";
                    selectBox.size = sortedComps.length > 2 ? sortedComps.length : 2; 
                });
            }
@@ -1295,21 +1330,29 @@
         apiCall('getBranchListFull', {}, 'GET').then(res => { 
             if(res.data){ 
                 globalBranchesFull = res.data.sort((a, b) => {
-                    let compA = (a.company || "").toLowerCase(); let compB = (b.company || "").toLowerCase();
-                    if(compA < compB) return -1; if(compA > compB) return 1;
-                    let brA = (a.branch || "").toLowerCase(); let brB = (b.branch || "").toLowerCase();
-                    if(brA < brB) return -1; if(brA > brB) return 1;
+                    let compA = (a.company || "").toLowerCase();
+                    let compB = (b.company || "").toLowerCase();
+                    if(compA < compB) return -1;
+                    if(compA > compB) return 1;
+                    let brA = (a.branch || "").toLowerCase();
+                    let brB = (b.branch || "").toLowerCase();
+                    if(brA < brB) return -1;
+                    if(brA > brB) return 1;
                     return 0;
                 });
+                
                 var permSelects = document.querySelectorAll('.perm-branch-select');
                 permSelects.forEach(selectBox => {
                     selectBox.innerHTML = '';
                     globalBranchesFull.forEach(b => {
                         selectBox.add(new Option(b.company + " - " + b.branch, b.company + " - " + b.branch));
                     });
-                    selectBox.style.height = "auto"; selectBox.style.overflow = "hidden";
+                    
+                    selectBox.style.height = "auto";
+                    selectBox.style.overflow = "hidden";
                     selectBox.size = globalBranchesFull.length > 5 ? globalBranchesFull.length : 5;
                 });
+
                 var isGlobalUser = (uRole === 'system owner' || currentUser.dataScope === 'ALL_COMPANIES');
                 var comp = isGlobalUser ? '' : currentUser.company;
                 filterBranchDropdown(comp, 'new-user-branch');
@@ -1331,6 +1374,9 @@
             } 
         });
 
+        // ========================================================
+        // DYNAMIC PERMISSION CONTROL LOGIC (WITH STRICT ROLE RULES)
+        // ========================================================
         var modules = res.allowedModules || "";
         var uRoleNorm = uRole.trim();
         var isValApproverRole = (uRoleNorm === 'valuation admin' || uRoleNorm === 'system owner');
@@ -1417,17 +1463,27 @@
                   for (let i = 0; i < filesToUpload.length; i++) {
                     let f = filesToUpload[i]; vbtn.innerText = `Uploading File ${i+1} of ${filesToUpload.length}...`;
                     await new Promise(r => setTimeout(r, 100)); 
+                    
                     let compressed = await compressImage(f.file, 800, 0.6); 
                     let base64Str = compressed.data; 
 
+                    // --- ImgBB Upload Code ---
                     const imgbbFormData = new FormData();
                     imgbbFormData.append("image", base64Str);
+
                     const imgbbRes = await fetch("https://api.imgbb.com/1/upload?key=ad4610425eecdef989e38d0e3a3564e2", {
-                        method: "POST", body: imgbbFormData
+                        method: "POST",
+                        body: imgbbFormData
                     });
                     const imgbbData = await imgbbRes.json();
-                    if (imgbbData.success) { formData[f.inputName] = imgbbData.data.url; } 
-                    else { throw new Error("Image Upload Failed"); }
+
+                    if (imgbbData.success) { 
+                        // Save ImgBB URL
+                        formData[f.inputName] = imgbbData.data.url; 
+                    } else { 
+                        throw new Error("Image Upload Failed"); 
+                    }
+                    // -------------------------
                   }
                   
                   vbtn.innerText = "Saving Request to Database...";
@@ -1437,6 +1493,7 @@
                   vbtn.innerText = "Submit Valuation Request"; vbtn.disabled = false;
                 } catch (error) { Swal.fire("Upload Error", error.message, "error"); vbtn.innerText = "Submit Valuation Request"; vbtn.disabled = false; }
             };
+            
             if (navigator.geolocation) { 
                 navigator.geolocation.getCurrentPosition(pos => executeValSubmit(pos.coords.latitude, pos.coords.longitude), err => executeValSubmit("", ""), { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }); 
             } else { executeValSubmit("", ""); }
@@ -1454,16 +1511,24 @@
                 let fileInput = e.target.querySelector('input[type="file"]');
                 if(fileInput.files.length > 0) {
                   let f = fileInput.files[0]; 
+                  
                   let compressed = await compressImage(f, 800, 0.6); 
                   let base64Str = compressed.data; 
+
                   const imgbbFormData = new FormData();
                   imgbbFormData.append("image", base64Str);
+
                   const imgbbRes = await fetch("https://api.imgbb.com/1/upload?key=ad4610425eecdef989e38d0e3a3564e2", {
-                      method: "POST", body: imgbbFormData
+                      method: "POST",
+                      body: imgbbFormData
                   });
                   const imgbbData = await imgbbRes.json();
-                  if (imgbbData.success) { formData.crBookUrl = imgbbData.data.url; } 
-                  else { throw new Error("Failed to upload CR Book to ImgBB"); }
+
+                  if (imgbbData.success) { 
+                      formData.crBookUrl = imgbbData.data.url; 
+                  } else { 
+                      throw new Error("Failed to upload CR Book to ImgBB"); 
+                  }
                 } else { throw new Error("CR Book is required!"); }
                 
                 rbtn.innerText = "Saving Request to Database...";
@@ -1478,6 +1543,7 @@
           };
         }
         
+        // Mobile එකේදී මුලින්ම ලොග් වෙද්දී Sidebar එක හංගනවා
         if (window.innerWidth <= 768) {
             document.getElementById('main-sidebar').classList.add('closed');
         }
@@ -1493,9 +1559,14 @@
          var res = await apiCall('saveTemplateSettings', {company: c, url: u});
          if(res.success) {
             Swal.fire("Saved", res.msg, "success");
-            document.getElementById('tpl-company').value = ''; document.getElementById('tpl-url').value = '';
-         } else { Swal.fire("Error", res.error || res.msg, "error"); }
-      } catch(e) { Swal.fire("Error", e.message, "error"); }
+            document.getElementById('tpl-company').value = '';
+            document.getElementById('tpl-url').value = '';
+         } else {
+            Swal.fire("Error", res.error || res.msg, "error");
+         }
+      } catch(e) {
+         Swal.fire("Error", e.message, "error");
+      }
     }
 
     async function initVehicleData() {
@@ -1528,13 +1599,16 @@
       try {
         const res = await apiCall('getHomeDashboardData', { role: currentUser.role, branch: currentUser.branch, email: currentUser.email }, 'GET');
         const data = res.data; if(!data) return;
+        
         if(document.getElementById('dash-c-tot')) document.getElementById('dash-c-tot').innerText = data.courier.total;
         if(document.getElementById('dash-c-pen')) document.getElementById('dash-c-pen').innerText = data.courier.pending;
         if(document.getElementById('dash-c-del')) document.getElementById('dash-c-del').innerText = data.courier.delivered;
+        
         if(document.getElementById('dash-r-tot')) document.getElementById('dash-r-tot').innerText = data.rmv.total;
         if(document.getElementById('dash-r-pen')) document.getElementById('dash-r-pen').innerText = data.rmv.pending;
         if(document.getElementById('dash-r-app')) document.getElementById('dash-r-app').innerText = data.rmv.approved;
         if(document.getElementById('dash-r-rej')) document.getElementById('dash-r-rej').innerText = data.rmv.rejected;
+        
         if(document.getElementById('dash-v-tot')) document.getElementById('dash-v-tot').innerText = data.valuation.total;
         if(document.getElementById('dash-v-pen')) document.getElementById('dash-v-pen').innerText = data.valuation.pending;
         if(document.getElementById('dash-v-app')) document.getElementById('dash-v-app').innerText = data.valuation.approved;
@@ -1548,9 +1622,11 @@
         if(document.getElementById('dash-cru-tot')) document.getElementById('dash-cru-tot').innerText = crTotalApproved;
         if(document.getElementById('dash-cru-pen')) document.getElementById('dash-cru-pen').innerText = crPendingCount;
         if(document.getElementById('dash-cru-com')) document.getElementById('dash-cru-com').innerText = crCompletedCount;
+
       } catch(e) { console.error(e); }
     }
 
+    // ====== NEW MODAL VIEW LOGIC ======
     function openValViewModal(index, source) {
         var d = source === 'dash' ? globalDashValData[index] : globalHistoryValData[index];
         if(!d) return;
@@ -1591,8 +1667,6 @@
         addPhoto(d.imgInside, "Office View");
         addPhoto(d.imgTyre, "Tyres");
         addPhoto(d.imgCustomer, "Customer View");
-        addPhoto(d.imgOther1, "Other 001");
-        addPhoto(d.imgOther2, "Other 002");
 
         document.getElementById('val-view-modal').style.display = 'block';
     }
@@ -1604,12 +1678,16 @@
       try {
         const res = await apiCall('getRMVData', {}, 'GET');
         var myRole = currentUser.role.toLowerCase(); 
+        var myBranch = currentUser.branch.toLowerCase();
+        
         globalRmvData = res.data;
+        
         tbody.innerHTML = "";
         if (!globalRmvData || globalRmvData.length === 0) { 
             tbody.innerHTML = "<tr><td colspan='8' style='text-align:center; padding:20px;'>No RMV requests found.</td></tr>"; 
             return; 
         }
+        
         for (var i = 0; i < globalRmvData.length; i++) {
           var row = globalRmvData[i]; 
           var statusBadge = "";
@@ -1623,9 +1701,12 @@
               actionBtn = `<button onclick="openRmvModal(${i})" style="background:#0d6efd; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">View & Confirm</button>`; 
           }
           var actByText = (row.approvedBy && row.approvedBy !== "-") ? row.approvedBy : '<span style="color:#999;font-size:12px;">Pending</span>';
+          
           tbody.innerHTML += `<tr style="border-bottom:1px solid #eee;"><td><b style="color:#e67e22;">${row.company}</b></td><td>${row.date}</td><td><b>${row.reqId}</b></td><td><span style="background:#2d2d2d; color:#fff; padding:3px 8px; border-radius:4px; font-weight:bold;">${row.vehicleNo}</span></td><td>${row.branch}</td><td>${actByText}</td><td>${statusBadge}</td><td>${actionBtn}</td></tr>`;
         }
+        
         filterRmvTable();
+
       } catch(e) { console.error(e); }
     }
     
@@ -1712,7 +1793,11 @@
       for (var i = 1; i < tr.length; i++) {
         var tds = tr[i].getElementsByTagName("td");
         if (tds.length >= 7) {
-          var tdDate = tds[1]; var tdId = tds[2]; var tdVeh = tds[3]; var tdBr = tds[4]; var tdStatus = tds[5];
+          var tdDate = tds[1];
+          var tdId = tds[2];
+          var tdVeh = tds[3];
+          var tdBr = tds[4];
+          var tdStatus = tds[5];
           var rowDateStr = (tdDate.textContent || tdDate.innerText || "").trim();
           var rowDate = new Date(rowDateStr.split(" ")[0]);
 
@@ -1776,6 +1861,7 @@
       document.getElementById('mod_status').innerText = item.status; document.getElementById('mod_status').style.background = badgeColor; document.getElementById('mod_status').style.color = textColor;
       document.getElementById('mod_action_by').innerText = item.approvedBy && item.approvedBy !== "-" ? item.approvedBy : "Not Actioned Yet";
       
+      // Reject කරලා නම් හේතුව පෙන්වීම
       if (item.status === 'Rejected' && item.remarks && item.remarks !== "") {
           document.getElementById('mod_reject_reason').style.display = 'block';
           document.getElementById('mod_reason_text').innerText = item.remarks;
@@ -1796,18 +1882,34 @@
 
     function processRmvApproval(status) {
       var item = globalRmvData[currentRmvIndex];
+      
+      // Reject කරනවා නම් Text Box එකක් පෙන්නනවා
       if (status === 'Rejected') {
           Swal.fire({
-            title: 'Reject Request', input: 'textarea', inputLabel: 'Reason for rejection', inputPlaceholder: 'Type your reason here...',
-            icon: 'warning', showCancelButton: true, confirmButtonColor: '#dc3545', confirmButtonText: 'Yes, Reject it!',
-            preConfirm: (reason) => { if (!reason) { Swal.showValidationMessage('Reason is required for rejection!'); } return reason; }
-          }).then(function(result) { if (result.isConfirmed) { executeRMVUpdate(status, result.value); } });
+            title: 'Reject Request',
+            input: 'textarea',
+            inputLabel: 'Reason for rejection',
+            inputPlaceholder: 'Type your reason here...',
+            inputAttributes: { 'aria-label': 'Type your reason here' },
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: 'Yes, Reject it!',
+            preConfirm: (reason) => {
+                if (!reason) { Swal.showValidationMessage('Reason is required for rejection!'); }
+                return reason;
+            }
+          }).then(function(result) {
+            if (result.isConfirmed) { executeRMVUpdate(status, result.value); }
+          });
       } else {
+          // Approve කරනවා නම් සාමාන්‍ය විදිහට Confirm කරනවා
           Swal.fire({ title: 'Confirm Action', text: `Mark this request as Approved?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#198754', confirmButtonText: `Yes, Approve it!` }).then(function(result) {
             if (result.isConfirmed) { executeRMVUpdate(status, ""); }
           });
       }
       
+      // Backend එකට යවන function එක
       async function executeRMVUpdate(actStatus, remarksText) {
           document.getElementById('mod_action_btns').style.display = 'none'; 
           Swal.fire({title: 'Updating...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
@@ -1816,7 +1918,9 @@
              globalRmvData[currentRmvIndex].status = actStatus; 
              globalRmvData[currentRmvIndex].approvedBy = currentUser.user; 
              globalRmvData[currentRmvIndex].remarks = remarksText; 
+             
              var nextIndex = -1; for(var i = 0; i < globalRmvData.length; i++) { if(globalRmvData[i].status === 'Pending') { nextIndex = i; break; } }
+             
              if(nextIndex !== -1) { 
                  Swal.fire({title: "Success", text: (res.data || res.success) + " Loading next...", icon: "success", timer: 1200, showConfirmButton: false});
                  setTimeout(() => openRmvModal(nextIndex), 1200); 
@@ -1831,6 +1935,7 @@
     async function createUserAdmin() {
       var c = document.getElementById('new-user-company').value;
       if (!c || c === "") { c = currentUser.company; }
+      
       var b = document.getElementById('new-user-branch').value; 
       var r = (String(currentUser.role || '').trim().toLowerCase() === 'system owner') ? document.getElementById('new-user-role').value : 'User'; 
       var n = document.getElementById('new-user-name').value; 
@@ -1843,9 +1948,14 @@
         const res = await apiCall('createNewSystemUser', { company: c, branch: b, name: n, username: u, email: e, role: r });
         if(res.success) { 
           Swal.fire("Success!", res.msg, "success"); 
-          document.getElementById('new-user-company').value = ""; document.getElementById('new-user-branch').value = ""; 
-          document.getElementById('new-user-role').value = "User"; document.getElementById('new-user-name').value = ""; 
-          document.getElementById('new-user-uname').value = ""; document.getElementById('new-user-email').value = ""; 
+          
+          document.getElementById('new-user-company').value = ""; 
+          document.getElementById('new-user-branch').value = ""; 
+          document.getElementById('new-user-role').value = "User"; 
+          document.getElementById('new-user-name').value = ""; 
+          document.getElementById('new-user-uname').value = ""; 
+          document.getElementById('new-user-email').value = ""; 
+          
           apiCall('getUsernamesList', {}, 'GET').then(res2 => { 
               if(res2.data){
                   systemUsersData = res2.data;
@@ -1867,17 +1977,23 @@
         if(res.success) { 
           Swal.fire("Success!", res.msg, "success"); 
           document.getElementById('new-cb-company').value = ""; document.getElementById('new-cb-branch').value = ""; document.getElementById('new-cb-code').value = "";
+          
           apiCall('getBranchListFull', {}, 'GET').then(res2 => { 
             if(res2.data){ 
                 globalBranchesFull = res2.data.sort((a, b) => {
-                    let compA = (a.company || "").toLowerCase(); let compB = (b.company || "").toLowerCase();
-                    if(compA < compB) return -1; if(compA > compB) return 1;
-                    let brA = (a.branch || "").toLowerCase(); let brB = (b.branch || "").toLowerCase();
-                    if(brA < brB) return -1; if(brA > brB) return 1;
+                    let compA = (a.company || "").toLowerCase();
+                    let compB = (b.company || "").toLowerCase();
+                    if(compA < compB) return -1;
+                    if(compA > compB) return 1;
+                    let brA = (a.branch || "").toLowerCase();
+                    let brB = (b.branch || "").toLowerCase();
+                    if(brA < brB) return -1;
+                    if(brA > brB) return 1;
                     return 0;
                 });
                 var comp = currentUser.role.toLowerCase() === 'system owner' ? '' : currentUser.company;
-                filterBranchDropdown(comp, 'new-user-branch'); filterBranchDropdown(comp, 'target_branch');
+                filterBranchDropdown(comp, 'new-user-branch');
+                filterBranchDropdown(comp, 'target_branch');
             } 
           });
         } else { Swal.fire("Error", res.error || res.msg || "Failed", "error"); }
@@ -1899,38 +2015,60 @@
       var c = document.getElementById('move-company').value;
       if (!c || c.trim() === "") { c = currentUser.company; }
       var b = document.getElementById('move-branch').value;
+      
       if(!u || !c || !b) return Swal.fire("Required", "Please fill all fields!", "warning");
+      
       Swal.fire({title: 'Updating...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
       try {
         const res = await apiCall('changeUserBranch', { targetUser: u, newCompany: c, newBranch: b });
         if(res.success) {
            Swal.fire("Success!", res.msg, "success");
-           document.getElementById('move-username').value = ""; document.getElementById('move-company').value = "";
+           document.getElementById('move-username').value = "";
+           document.getElementById('move-company').value = "";
            document.getElementById('move-branch').innerHTML = '<option value="">-- Select New Branch --</option>';
-        } else { Swal.fire("Error", res.error || res.msg || "Failed", "error"); }
+        } else {
+           Swal.fire("Error", res.error || res.msg || "Failed", "error");
+        }
       } catch(e) { Swal.fire("Error", "Server Error", "error"); }
     }
 
+    // ========================================================
+    // NEW: USER PERMISSIONS & ACCESS MANAGEMENT LOGIC
+    // ========================================================
+    
     var currentSelectedPermUserRole = "user";
 
     function toggleSub(mainId, subClass) {
         let isChecked = document.getElementById(mainId).checked;
-        document.querySelectorAll('.' + subClass).forEach(chk => { if (!chk.disabled) { chk.checked = isChecked; } });
+        document.querySelectorAll('.' + subClass).forEach(chk => {
+            if (!chk.disabled) {
+                chk.checked = isChecked;
+            }
+        });
     }
 
     function toggleModuleBranch(module) {
         var scope = document.getElementById('scope_' + module).value;
         var branchSelect = document.getElementById('branch_' + module);
         var companySelect = document.getElementById('company_' + module);
-        if(branchSelect) { branchSelect.style.display = (scope === 'SELECTED_BRANCH' || scope === 'SELECTED') ? 'block' : 'none'; }
-        if(companySelect) { companySelect.style.display = (scope === 'SELECTED_COMPANY') ? 'block' : 'none'; }
+        
+        if(branchSelect) {
+            branchSelect.style.display = (scope === 'SELECTED_BRANCH' || scope === 'SELECTED') ? 'block' : 'none';
+        }
+        if(companySelect) {
+            companySelect.style.display = (scope === 'SELECTED_COMPANY') ? 'block' : 'none';
+        }
     }
 
     async function loadUserPermDetails() {
       var user = document.getElementById('perm-user-search').value;
       var section = document.getElementById('perm-details-section');
+      
       var isUserValid = systemUsersData.some(u => u.username === user);
-      if(!user || !isUserValid) { section.style.display = 'none'; return; }
+      if(!user || !isUserValid) {
+         section.style.display = 'none';
+         return;
+      }
       
       section.style.display = 'block';
       document.getElementById('perm-status-badge').innerText = "Loading...";
@@ -1938,6 +2076,7 @@
       
       try {
         const res = await apiCall('getUserPermDetails', { username: user }, 'GET');
+        
         document.querySelectorAll('.perm-label input[type="checkbox"]').forEach(chk => chk.checked = false);
         
         if (res.success && res.data) {
@@ -1946,12 +2085,19 @@
            currentSelectedPermUserRole = String(rawRole).trim().toLowerCase();
 
            var roleBadge = document.getElementById('perm-role-badge');
-           if (roleBadge) { roleBadge.innerText = rawRole; }
+           if (roleBadge) {
+               roleBadge.innerText = rawRole;
+           }
 
+           // Role-based Feature Eligibility Rules:
+           // 01. Valuation Approval = valuation admin / system owner ONLY (No access for User / Super admin)
            var canValApprove = (currentSelectedPermUserRole === 'valuation admin' || currentSelectedPermUserRole === 'system owner');
+           // 02. RMV Confirmation Approval = rmv approval / rmv request approval user / system owner ONLY (No access for User / Super admin)
            var canRmvApprove = (currentSelectedPermUserRole === 'rmv approval' || currentSelectedPermUserRole === 'rmv request approval user' || currentSelectedPermUserRole === 'system owner');
+           // 04. System Admin = NOT allowed for User role
            var canSysAdmin = (currentSelectedPermUserRole !== 'user');
 
+           // Enable/Disable checkboxes & show clear notes
            var chkValPend = document.getElementById('chk_val_pend');
            var noteValPend = document.getElementById('note_val_pend');
            if (chkValPend) chkValPend.disabled = !canValApprove;
@@ -1975,6 +2121,7 @@
 
            var m = res.data.modules || "";
            if (m.includes("Dashboard")) document.getElementById('chk_dash').checked = true;
+           
            if (m.includes("Courier-Send")) document.getElementById('chk_courier_send').checked = true;
            if (m.includes("Courier-Action")) document.getElementById('chk_courier_action').checked = true;
            if (m.includes("Courier-Send") && m.includes("Courier-Action")) document.getElementById('chk_courier_main').checked = true;
@@ -2005,6 +2152,7 @@
            if (m.includes("Admin-Map") && canSysAdmin) document.getElementById('chk_admin_map').checked = true;
            if (canSysAdmin && m.includes("Admin-UserMgt") && m.includes("Admin-Map")) document.getElementById('chk_admin_main').checked = true;
            
+           // Clear previous multi-select selections first
            document.querySelectorAll('.perm-branch-select option, .perm-company-select option').forEach(opt => opt.selected = false);
 
            const applySafeSelectValue = (sEl, desiredVal, fallbackVal) => {
@@ -2014,7 +2162,9 @@
                if(val === "OWN") val = "BRANCH_MANAGER";
                if(val === "SELECTED") val = "SELECTED_BRANCH";
                sEl.value = val;
-               if(!sEl.value || sEl.selectedIndex === -1) { sEl.value = fallbackVal; }
+               if(!sEl.value || sEl.selectedIndex === -1) {
+                   sEl.value = fallbackVal;
+               }
            };
 
            var rawOldScope = (res.data.scope || "").trim().toUpperCase();
@@ -2067,16 +2217,20 @@
 
            document.getElementById('perm-status-badge').innerText = res.data.status;
            document.getElementById('perm-status-badge').style.background = res.data.status === "Active" ? "#28a745" : "#dc3545";
+           
            var btn = document.getElementById('btn-revoke-grant');
            btn.innerText = res.data.status === "Active" ? "Revoke Complete Access" : "Grant Access";
            btn.style.background = res.data.status === "Active" ? "#dc3545" : "#28a745";
         }
-      } catch (e) { document.getElementById('perm-status-badge').innerText = "Error Loading Data"; }
+      } catch (e) {
+         document.getElementById('perm-status-badge').innerText = "Error Loading Data";
+      }
     }
 
     function saveUserPermissions() {
        var user = document.getElementById('perm-user-search').value;
        if(!user) return Swal.fire("Required", "Please select a user to update.", "warning");
+       
        var modules = [];
        var canValApprove = (currentSelectedPermUserRole === 'valuation admin' || currentSelectedPermUserRole === 'system owner');
        var canRmvApprove = (currentSelectedPermUserRole === 'rmv approval' || currentSelectedPermUserRole === 'rmv request approval user' || currentSelectedPermUserRole === 'system owner');
@@ -2086,7 +2240,9 @@
            var el = document.getElementById(id);
            if(el && el.checked && !el.disabled && isAllowed) modules.push(name);
        };
+       
        if(document.getElementById('chk_dash') && document.getElementById('chk_dash').checked) modules.push("Dashboard");
+       
        checkSub('chk_courier_send', "Courier-Send"); checkSub('chk_courier_action', "Courier-Action");
        checkSub('chk_rmv_req', "RMV-Request"); checkSub('chk_rmv_action', "RMV-Action", canRmvApprove); checkSub('chk_rmv_status', "RMV-Status");
        checkSub('chk_val_new', "Valuation-New"); checkSub('chk_val_pend', "Valuation-Pending", canValApprove); checkSub('chk_val_hist', "Valuation-History");
@@ -2099,9 +2255,14 @@
            var scopeSelect = document.getElementById('scope_' + modPrefix);
            if(!scopeSelect) return null;
            var scopeVal = scopeSelect.value;
-           if(!scopeVal || scopeVal === 'CUSTOM') { scopeVal = (modPrefix === 'admin') ? 'BRANCH_MANAGER' : 'MY_REQUESTS'; }
+           if(!scopeVal || scopeVal === 'CUSTOM') {
+               scopeVal = (modPrefix === 'admin') ? 'BRANCH_MANAGER' : 'MY_REQUESTS';
+           }
            if(scopeVal === 'SELECTED') scopeVal = 'SELECTED_BRANCH';
-           var branches = []; var companies = [];
+           
+           var branches = [];
+           var companies = [];
+           
            if(scopeVal === 'SELECTED_BRANCH') {
               var branchObj = document.getElementById('branch_' + modPrefix);
               if(branchObj) {
@@ -2131,7 +2292,12 @@
        var moduleScopesStr = JSON.stringify(moduleScopes);
 
        Swal.fire({ title: "Updating Permissions...", allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-       apiCall('saveUserPermissions', { username: user, modules: modulesStr, moduleScopes: moduleScopesStr }).then(res => {
+       
+       apiCall('saveUserPermissions', {
+          username: user,
+          modules: modulesStr,
+          moduleScopes: moduleScopesStr
+       }).then(res => {
           if(res.success) {
               if (currentUser && currentUser.username && currentUser.username.toLowerCase() === user.toLowerCase()) {
                   currentUser.allowedModules = modulesStr;
@@ -2140,7 +2306,8 @@
                   loadDashboardStats();
               }
               Swal.fire("Saved!", res.msg, "success");
-          } else { Swal.fire("Error", res.error || res.msg || "Failed", "error"); }
+          } 
+          else { Swal.fire("Error", res.error || res.msg || "Failed", "error"); }
        }).catch(e => Swal.fire("Error", "Network Error", "error"));
     }
 
@@ -2153,15 +2320,20 @@
        var newStatus = isCurrentlyActive ? "Revoked" : "Active";
        
        Swal.fire({
-          title: `${actionName} Access?`, text: `Are you sure you want to ${actionName.toLowerCase()} login access for ${user}?`,
-          icon: isCurrentlyActive ? "warning" : "info", showCancelButton: true,
-          confirmButtonColor: isCurrentlyActive ? "#dc3545" : "#28a745", confirmButtonText: `Yes, ${actionName}`
+          title: `${actionName} Access?`,
+          text: `Are you sure you want to ${actionName.toLowerCase()} login access for ${user}?`,
+          icon: isCurrentlyActive ? "warning" : "info",
+          showCancelButton: true,
+          confirmButtonColor: isCurrentlyActive ? "#dc3545" : "#28a745",
+          confirmButtonText: `Yes, ${actionName}`
        }).then((result) => {
           if(result.isConfirmed) {
              Swal.fire({ title: "Updating...", allowOutsideClick: false, didOpen: () => Swal.showLoading() });
              apiCall('toggleUserAccess', { username: user, status: newStatus }).then(res => {
-                if (res.success) { Swal.fire("Success!", res.msg, "success"); loadUserPermDetails(); } 
-                else { Swal.fire("Error", res.error || res.msg, "error"); }
+                if (res.success) {
+                   Swal.fire("Success!", res.msg, "success");
+                   loadUserPermDetails(); 
+                } else { Swal.fire("Error", res.error || res.msg, "error"); }
              }).catch(e => Swal.fire("Error", "Network Error", "error"));
           }
        });
@@ -2172,26 +2344,35 @@
       try {
           const res = await apiCall('getHomeDashboardData', { role: currentUser.role, branch: currentUser.branch, email: currentUser.email }, 'GET');
           mapMarkers.forEach(m => rmvMap.removeLayer(m)); mapMarkers = []; 
+          
           const addMarker = (lat, lng, color, popupHtml) => {
               if (lat && lng && lat !== "Not Found" && lat !== "Location Blocked" && lat !== "Not Supported") { 
                   var marker = L.marker([parseFloat(lat) + (Math.random()-0.5)*0.0003, parseFloat(lng) + (Math.random()-0.5)*0.0003], {
                       icon: L.divIcon({className: 'custom-pin', html: `<div style="background-color:${color}; width:16px; height:16px; border-radius:50%; border:2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>`, iconSize: [16, 16]})
                   }).addTo(rmvMap); 
-                  marker.bindPopup(popupHtml); mapMarkers.push(marker); 
+                  marker.bindPopup(popupHtml); 
+                  mapMarkers.push(marker); 
               }
           };
+
+          // Courier Locations
           res.data.courier.list.forEach(row => { 
               var color = row.status.toLowerCase() === 'pending' ? '#0d6efd' : '#20c997'; 
               addMarker(row.lat, row.lng, color, `<b>📦 Courier</b><br>ID: ${row.id}<br>Status: <b>${row.status}</b>`);
           }); 
+
+          // RMV Locations
           res.data.rmv.list.forEach(row => { 
               var color = row.status.toLowerCase() === 'pending' ? '#6f42c1' : (row.status.toLowerCase() === 'approved' ? '#198754' : '#dc3545'); 
               addMarker(row.lat, row.lng, color, `<b>🚗 RMV Request</b><br>ID: ${row.id}<br>Vehicle: ${row.vehicle}<br>Status: <b>${row.status}</b>`);
           }); 
+          
+          // Valuation Locations
           res.data.valuation.list.forEach(row => { 
               var color = row.status.toLowerCase().includes('pending') ? '#fd7e14' : (row.status.toLowerCase() === 'approved' ? '#198754' : '#dc3545'); 
               addMarker(row.lat, row.lng, color, `<b>📋 Valuation</b><br>Ref: ${row.refNo || row.vehNo}<br>Vehicle: ${row.vehNo}<br>Status: <b>${row.status}</b>`);
           }); 
+
       } catch(e) { console.error("Map Error", e); }
     }
 
@@ -2208,7 +2389,11 @@
       if(element) { element.classList.add('active'); element.querySelector('i').className = 'fas fa-check-circle'; }
       document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
       var view = document.getElementById('view-' + viewId); if(view) view.style.display = 'block';
-      if (window.innerWidth <= 768) { document.getElementById('main-sidebar').classList.add('closed'); }
+      
+      // Mobile එකේදී Menu Item එකක් Click කරාම Sidebar එක Auto-Close වෙනවා
+      if (window.innerWidth <= 768) {
+          document.getElementById('main-sidebar').classList.add('closed');
+      }
 
       if(viewId === 'dashboard') loadDashboardStats();
       if(viewId === 'courier-new') { generateAutoId(); }
@@ -2285,14 +2470,21 @@
           if(row[0] === "Error") { tbody.innerHTML += `<tr><td colspan='8' style='color:red; text-align:center;'><b>System Error:</b> ${row[1]}</td></tr>`; hasData = true; return; }
           hasData = true; var status = row[8] ? String(row[8]).trim() : "Pending";
           var badge = status.toLowerCase() === 'pending' ? '<span class="badge-pending">Pending</span>' : '<span class="badge-accepted">Delivered</span>';
+          
           var toBr = row[5] ? String(row[5]).trim().toLowerCase() : "";
           var myRole = currentUser.role ? currentUser.role.trim().toLowerCase() : "";
           var btn = (status.toLowerCase() === 'pending' && (currentUser.branch.toLowerCase() === toBr || myRole === 'super admin' || myRole === 'system owner' || (toBr === 'rmv' && (myRole === 'rmv approval' || myRole === 'rmv branch')))) ? `<button onclick="receiveCourier('${row[2]}')" style="background:#198754;color:white;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">Mark Received</button>` : "-";
+          
           tbody.innerHTML += `<tr><td><b style="color:#e67e22;">${row[0]}</b></td><td>${row[1]}</td><td><b>${row[2]}</b></td><td>${row[3]}</td><td>${row[4]} ➔ ${row[5]}</td><td>${row[6]}<br><small>${row[7]}</small></td><td>${badge}</td><td>${btn}</td></tr>`;
         });
+        
         if(!hasData) { tbody.innerHTML = "<tr><td colspan='8' style='text-align:center;'>No Couriers Found for your branch.</td></tr>"; }
+        
         filterCourierTable(); 
-      } catch(e) { tbody.innerHTML = "<tr><td colspan='8' style='text-align:center;color:red;'>Error Loading Data</td></tr>"; }
+        
+      } catch(e) { 
+        tbody.innerHTML = "<tr><td colspan='8' style='text-align:center;color:red;'>Error Loading Data</td></tr>"; 
+      }
     }
     function receiveCourier(id) {
         Swal.fire({ title: 'Receive Package?', text: `Mark package ${id} as delivered?`, icon: 'question', showCancelButton: true, confirmButtonText: 'Yes, Received!' }).then(async result => {
@@ -2342,29 +2534,44 @@
     async function getSealImageBase64(customDateStr, onlyDateBar = false) {
       const issueDate = getFormattedIssueDate(customDateStr);
       const canvas = document.createElement('canvas');
-      canvas.width = 1000; canvas.height = 800;
+      canvas.width = 1000;
+      canvas.height = 800;
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.translate(canvas.width / 2, canvas.height / 2);
       ctx.rotate(-Math.PI / 8);
-      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
 
       if (!onlyDateBar) {
-        ctx.strokeStyle = "rgba(220, 53, 69, 0.40)"; ctx.lineWidth = 4;
+        // Outer Seal Box (matches original 3-line box: y = -80 to +90)
+        ctx.strokeStyle = "rgba(220, 53, 69, 0.40)";
+        ctx.lineWidth = 4;
         ctx.strokeRect(-360, -80, 720, 170);
-        ctx.fillStyle = "rgba(220, 53, 69, 0.38)"; ctx.font = "bold 32px sans-serif";
+
+        // Standard 3 Watermark Lines
+        ctx.fillStyle = "rgba(220, 53, 69, 0.38)";
+        ctx.font = "bold 32px sans-serif";
         ctx.fillText("මෙය වාහනය ලියාපදිංචි සහතිකයේ සත්‍ය පිටපතකි.", 0, -35);
         ctx.fillText("අදායම් බලපත්‍රය ලබාගැනීමට /", 0, 10);
         ctx.fillText("දුම් වාර්තාව ලබාගැනීමට පමණි", 0, 50);
       } else {
-        const offsetX = -85; const barW = 680; const barY = 170; const barH = 48;
+        // Moved further down (y = 170..218) and shifted left (offsetX = -85) so the right-side date never clips
+        const offsetX = -85;
+        const barW = 680;
+        const barY = 170;
+        const barH = 48;
         ctx.fillStyle = "rgba(255, 245, 157, 0.20)";
         ctx.fillRect(offsetX - (barW / 2), barY, barW, barH);
-        ctx.strokeStyle = "rgba(220, 53, 69, 0.45)"; ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(220, 53, 69, 0.45)";
+        ctx.lineWidth = 2;
         ctx.strokeRect(offsetX - (barW / 2), barY, barW, barH);
-        ctx.fillStyle = "rgba(198, 40, 40, 0.48)"; ctx.font = "900 23px sans-serif";
-        ctx.fillText(`මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කරු දිනය: ${issueDate}`, offsetX, barY + (barH / 2), barW - 20);
+
+        ctx.fillStyle = "rgba(198, 40, 40, 0.48)";
+        ctx.font = "900 23px sans-serif";
+        ctx.fillText(`මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කල දිනය: ${issueDate}`, offsetX, barY + (barH / 2), barW - 20);
       }
+
       return canvas.toDataURL('image/png');
     }
 
@@ -2376,11 +2583,18 @@
       const { width: sealWidth, height: sealHeight } = sealImage.scale(0.8); 
       const pages = pdfDoc.getPages();
       for(let i = 0; i < pages.length; i++) {
-         const page = pages[i]; const { width, height } = page.getSize();
-         page.drawImage(sealImage, { x: (width / 2) - (sealWidth / 2), y: (height / 2) - (sealHeight / 2), width: sealWidth, height: sealHeight });
+         const page = pages[i];
+         const { width, height } = page.getSize();
+         page.drawImage(sealImage, {
+            x: (width / 2) - (sealWidth / 2),
+            y: (height / 2) - (sealHeight / 2),
+            width: sealWidth,
+            height: sealHeight
+         });
       }
       const pdfBytes = await pdfDoc.save();
-      let binary = ''; const bytes = new Uint8Array(pdfBytes);
+      let binary = '';
+      const bytes = new Uint8Array(pdfBytes);
       for (let i = 0; i < bytes.byteLength; i++) { binary += String.fromCharCode(bytes[i]); }
       return window.btoa(binary);
     }
@@ -2389,26 +2603,41 @@
       const issueDate = getFormattedIssueDate(customDateStr);
       ctx.save();
       let fontSize = Math.max(14, Math.floor(width / 28));
-      ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.translate(width / 2, height / 2); ctx.rotate(-Math.PI / 6);
-      let boxW = fontSize * 23; let boxH = fontSize * 4.8;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.translate(width / 2, height / 2);
+      ctx.rotate(-Math.PI / 6);
+
+      let boxW = fontSize * 23;
+      let boxH = fontSize * 4.8;
 
       if (!onlyDateBar) {
-        ctx.strokeStyle = "rgba(220, 53, 69, 0.40)"; ctx.lineWidth = Math.max(2, Math.floor(fontSize / 8));
+        // Outer Seal Box & Standard 3 Lines (y = -2.4*fontSize to +2.4*fontSize)
+        ctx.strokeStyle = "rgba(220, 53, 69, 0.40)";
+        ctx.lineWidth = Math.max(2, Math.floor(fontSize / 8));
         ctx.strokeRect(-boxW / 2, -fontSize * 2.4, boxW, boxH);
-        ctx.fillStyle = "rgba(220, 53, 69, 0.38)"; ctx.font = "bold " + fontSize + "px sans-serif";
+
+        ctx.fillStyle = "rgba(220, 53, 69, 0.38)";
+        ctx.font = "bold " + fontSize + "px sans-serif";
         ctx.fillText("මෙය වාහනය ලියාපදිංචි සහතිකයේ සත්‍ය පිටපතකි.", 0, -fontSize * 1.5, boxW * 0.94);
         ctx.fillText("අදායම් බලපත්‍රය ලබාගැනීමට /", 0, 0, boxW * 0.94);
         ctx.fillText("දුම් වාර්තාව ලබාගැනීමට පමණි", 0, fontSize * 1.4, boxW * 0.94);
       } else {
-        let offsetX = -fontSize * 3.2; let barW = fontSize * 21.5; let barH = fontSize * 1.55; let barY = fontSize * 4.5;
+        // Moved further down (barY = fontSize * 4.5) and shifted left (offsetX = -fontSize * 3.2) so date never clips on right
+        let offsetX = -fontSize * 3.2;
+        let barW = fontSize * 21.5;
+        let barH = fontSize * 1.55;
+        let barY = fontSize * 4.5;
         ctx.fillStyle = "rgba(255, 245, 157, 0.20)";
         ctx.fillRect(offsetX - (barW / 2), barY, barW, barH);
-        ctx.strokeStyle = "rgba(220, 53, 69, 0.45)"; ctx.lineWidth = Math.max(1.5, Math.floor(fontSize / 10));
+        ctx.strokeStyle = "rgba(220, 53, 69, 0.45)";
+        ctx.lineWidth = Math.max(1.5, Math.floor(fontSize / 10));
         ctx.strokeRect(offsetX - (barW / 2), barY, barW, barH);
+
         let dateFontSize = Math.max(11, Math.floor(fontSize * 0.76));
-        ctx.fillStyle = "rgba(198, 40, 40, 0.48)"; ctx.font = "900 " + dateFontSize + "px sans-serif";
-        ctx.fillText(`මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කරු දිනය: ${issueDate}`, offsetX, barY + (barH / 2), barW * 0.95);
+        ctx.fillStyle = "rgba(198, 40, 40, 0.48)";
+        ctx.font = "900 " + dateFontSize + "px sans-serif";
+        ctx.fillText(`මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කල දිනය: ${issueDate}`, offsetX, barY + (barH / 2), barW * 0.95);
       }
       ctx.restore();
     }
@@ -2454,15 +2683,13 @@
           if(req.imgInside !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgInside)}')"><img src="${getImgUrl(req.imgInside)}" onerror="${errImg}"><div class="admin-photo-label">Office View</div></div>`;
           if(req.imgTyre !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgTyre)}')"><img src="${getImgUrl(req.imgTyre)}" onerror="${errImg}"><div class="admin-photo-label">Tyre Condition</div></div>`;
           if(req.imgCustomer !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgCustomer)}')"><img src="${getImgUrl(req.imgCustomer)}" onerror="${errImg}"><div class="admin-photo-label">Customer View</div></div>`;
-          if(req.imgOther1 && req.imgOther1 !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgOther1)}')"><img src="${getImgUrl(req.imgOther1)}" onerror="${errImg}"><div class="admin-photo-label">Other 001</div></div>`;
-          if(req.imgOther2 && req.imgOther2 !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgOther2)}')"><img src="${getImgUrl(req.imgOther2)}" onerror="${errImg}"><div class="admin-photo-label">Other 002</div></div>`;
 
           var actionHtml = '';
           if (isAdmin) {
              actionHtml = `<div class="admin-valuation-form"><h4 style="margin-bottom:15px; color:#c62828;">Inspector Assessment <span style="font-size:12px; color:#555;">(${req.company})</span></h4><div class="admin-input-row"><div><label>Market Value (LKR)</label><input type="number" id="mVal_${req.row}" class="admin-input" value="${req.defaultMarket || ''}"></div><div><label>Forced Sale Value (LKR)</label><input type="number" id="sVal_${req.row}" class="admin-input" value="${req.defaultSale || ''}"></div></div><label>Remarks</label><input type="text" id="rem_${req.row}" class="admin-input" placeholder="Add any comments..."><div style="display:flex; gap:10px; margin-top:10px;"><button onclick="processValuation(${req.row}, 'Approved')" style="flex:1; background:#198754; color:white; padding:12px; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Approve & Generate PDF</button><button onclick="processValuation(${req.row}, 'Rejected')" style="flex:1; background:#dc3545; color:white; padding:12px; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Reject Request</button></div></div>`;
           } else { actionHtml = '<div style="background:#fff3cd; padding:15px; border-radius:5px; text-align:center; font-weight:bold; color:#856404; border:1px solid #ffeeba; margin-top:15px;">Status: Pending Admin Approval ⏳</div>'; }
 
-          var card = `<div class="admin-req-card"><div class="info-grid"><div class="info-box"><strong>Vehicle No</strong><span>${req.vehNo}</span></div><div class="info-box"><strong>Make & Model</strong><span>${req.make} ${req.model}</span></div><div class="info-box"><strong>YOM</strong><span>${req.yom}</span></div><div class="info-box"><strong>Requested By</strong><span>${req.reqName} (${req.reqBranch})</span></div><div class="info-box"><strong>Req Amount</strong><span>Rs. ${req.reqAmount}</span></div><div class="info-box"><strong>Chassis No</strong><span>${req.chassisNo}</span></div><div class="info-box" style="grid-column: span 3;"><strong>Requester Remarks</strong><span>${req.remarks || '-'}</span></div></div><div class="admin-photo-grid">${imgHtml}</div>${actionHtml}</div>`;
+          var card = `<div class="admin-req-card"><div class="info-grid"><div class="info-box"><strong>Vehicle No</strong><span>${req.vehNo}</span></div><div class="info-box"><strong>Make & Model</strong><span>${req.make} ${req.model}</span></div><div class="info-box"><strong>YOM</strong><span>${req.yom}</span></div><div class="info-box"><strong>Requested By</strong><span>${req.reqName} (${req.reqBranch})</span></div><div class="info-box"><strong>Req Amount</strong><span>Rs. ${req.reqAmount}</span></div><div class="info-box"><strong>Chassis No</strong><span>${req.chassisNo}</span></div></div><div class="admin-photo-grid">${imgHtml}</div>${actionHtml}</div>`;
           container.innerHTML += card;
         });
       } catch(e) { container.innerHTML = "<div style='color:red;'>Error Loading Valuations</div>"; }
@@ -2486,6 +2713,7 @@
         const res = await apiCall('getValuationSummary', { role: currentUser.role, branch: currentUser.branch, email: currentUser.email }, 'GET');
         const data = res.data; tbody.innerHTML = "";
         globalHistoryValData = data; 
+        
         if(!data || data.length === 0) { tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>No History Found</td></tr>"; return; }
         data.forEach((row, idx) => {
           var statusBadge = row.status.toLowerCase() === 'approved' ? '<span class="badge-accepted">Approved</span>' : (row.status.toLowerCase() === 'rejected' ? '<span class="badge-rejected">Rejected</span>' : '<span class="badge-pending">Pending Approval</span>');
@@ -2548,13 +2776,27 @@
 
         var exportData = filteredRows.map(function(r, idx) {
           return {
-            "No": idx + 1, "Company": r.company || "-", "Date": r.date || "-", "Reference No": r.refNo || "-",
-            "Requested By": r.reqName || "-", "Branch": r.branch || "-", "Vehicle No": r.vehNo || "-",
-            "Vehicle Type": r.vType || "-", "Make & Model": r.makeModel || "-", "YOM": r.yom || "-",
-            "Chassis No": r.chassis || "-", "Engine No": r.engine || "-", "Color": r.color || "-",
-            "Engine CC": r.engCc || "-", "Fuel Type": r.fuelType || "-", "Requested Amount (LKR)": r.reqAmnt || "-",
-            "Market Value (LKR)": r.marketVal || "-", "Forced Sale Value (LKR)": r.saleVal || "-", "Status": r.status || "-",
-            "Approved Date": r.approvedDate || "-", "Admin Remarks": (r.adminRemarks && r.adminRemarks !== "-") ? r.adminRemarks : (r.remarks || "-"),
+            "No": idx + 1,
+            "Company": r.company || "-",
+            "Date": r.date || "-",
+            "Reference No": r.refNo || "-",
+            "Requested By": r.reqName || "-",
+            "Branch": r.branch || "-",
+            "Vehicle No": r.vehNo || "-",
+            "Vehicle Type": r.vType || "-",
+            "Make & Model": r.makeModel || "-",
+            "YOM": r.yom || "-",
+            "Chassis No": r.chassis || "-",
+            "Engine No": r.engine || "-",
+            "Color": r.color || "-",
+            "Engine CC": r.engCc || "-",
+            "Fuel Type": r.fuelType || "-",
+            "Requested Amount (LKR)": r.reqAmnt || "-",
+            "Market Value (LKR)": r.marketVal || "-",
+            "Forced Sale Value (LKR)": r.saleVal || "-",
+            "Status": r.status || "-",
+            "Approved Date": r.approvedDate || "-",
+            "Admin Remarks": (r.adminRemarks && r.adminRemarks !== "-") ? r.adminRemarks : (r.remarks || "-"),
             "PDF Report URL": r.pdf || "-"
           };
         });
@@ -2565,14 +2807,17 @@
         if (typeof XLSX !== "undefined") {
           var ws = XLSX.utils.json_to_sheet(exportData);
           ws['!cols'] = [
-            { wch: 6 }, { wch: 14 }, { wch: 14 }, { wch: 18 }, { wch: 18 }, { wch: 16 }, { wch: 15 }, { wch: 15 },
-            { wch: 24 }, { wch: 8 }, { wch: 20 }, { wch: 20 }, { wch: 14 }, { wch: 12 }, { wch: 12 }, { wch: 20 },
-            { wch: 18 }, { wch: 20 }, { wch: 14 }, { wch: 16 }, { wch: 28 }, { wch: 40 }
+            { wch: 6 }, { wch: 14 }, { wch: 14 }, { wch: 18 }, { wch: 18 },
+            { wch: 16 }, { wch: 15 }, { wch: 15 }, { wch: 24 }, { wch: 8 },
+            { wch: 20 }, { wch: 20 }, { wch: 14 }, { wch: 12 }, { wch: 12 },
+            { wch: 20 }, { wch: 18 }, { wch: 20 }, { wch: 14 }, { wch: 16 },
+            { wch: 28 }, { wch: 40 }
           ];
           var wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "Valuation History");
           XLSX.writeFile(wb, fileName);
         } else {
+          // Fallback to CSV if XLSX CDN fails to load
           var headers = Object.keys(exportData[0]);
           var csvRows = [headers.join(",")];
           exportData.forEach(function(rowObj) {
@@ -2586,7 +2831,9 @@
           var link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
           link.download = "Valuation_History_Report_" + todayStr + ".csv";
-          document.body.appendChild(link); link.click(); document.body.removeChild(link);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         }
       } catch (err) {
         console.error(err);
@@ -2618,13 +2865,19 @@
       var btnDir = document.getElementById('btn_cr_mode_direct');
 
       if (mode === 'direct') {
-        valBox.style.display = 'none'; dirBox.style.display = 'block';
-        btnDir.style.background = '#0d6efd'; btnDir.style.color = '#fff';
-        btnVal.style.background = '#fff'; btnVal.style.color = '#0d6efd';
+        valBox.style.display = 'none';
+        dirBox.style.display = 'block';
+        btnDir.style.background = '#0d6efd';
+        btnDir.style.color = '#fff';
+        btnVal.style.background = '#fff';
+        btnVal.style.color = '#0d6efd';
       } else {
-        valBox.style.display = 'block'; dirBox.style.display = 'none';
-        btnVal.style.background = '#0d6efd'; btnVal.style.color = '#fff';
-        btnDir.style.background = '#fff'; btnDir.style.color = '#0d6efd';
+        valBox.style.display = 'block';
+        dirBox.style.display = 'none';
+        btnVal.style.background = '#0d6efd';
+        btnVal.style.color = '#fff';
+        btnDir.style.background = '#fff';
+        btnDir.style.color = '#0d6efd';
       }
     }
 
@@ -2634,38 +2887,65 @@
       var remarks = document.getElementById('direct_cr_remarks').value.trim();
       var fileInput = document.getElementById('direct_cr_file');
 
-      if (!facilityNo || !vehNo) { return Swal.fire("Required", "Please enter both Facility Number and Vehicle No!", "warning"); }
-      if (fileInput.files.length === 0) { return Swal.fire("Required", "Please select a CR document to upload!", "warning"); }
+      if (!facilityNo || !vehNo) {
+        return Swal.fire("Required", "Please enter both Facility Number and Vehicle No!", "warning");
+      }
+      if (fileInput.files.length === 0) {
+        return Swal.fire("Required", "Please select a CR document to upload!", "warning");
+      }
 
       var btn = document.getElementById('directCrSubmitBtn');
-      btn.disabled = true; btn.innerText = "Processing File... ⏳";
+      btn.disabled = true;
+      btn.innerText = "Processing File... ⏳";
 
       try {
-        let f = fileInput.files[0]; let base64Str, typeStr, nameStr;
+        let f = fileInput.files[0];
+        let base64Str, typeStr, nameStr;
+
         if (f.type === "application/pdf") {
           btn.innerText = "Applying Seal to PDF... ⏳";
-          base64Str = await watermarkPDF(f); typeStr = 'application/pdf'; nameStr = f.name;
+          base64Str = await watermarkPDF(f);
+          typeStr = 'application/pdf';
+          nameStr = f.name;
         } else {
           btn.innerText = "Applying Seal to Image... ⏳";
           let compressed = await compressAndWatermarkImage(f, 1000, 0.7);
-          base64Str = compressed.data; typeStr = compressed.type; nameStr = compressed.name;
+          base64Str = compressed.data;
+          typeStr = compressed.type;
+          nameStr = compressed.name;
         }
 
         btn.innerText = "Uploading to Drive & Saving to Sheet... 🚀";
+
         var payload = {
-          company: currentUser.company, branch: currentUser.branch, uploadedBy: currentUser.user, email: currentUser.email,
-          facilityNo: facilityNo, vehNo: vehNo, remarks: remarks, fileData: { base64: base64Str, type: typeStr, name: nameStr }
+          company: currentUser.company,
+          branch: currentUser.branch,
+          uploadedBy: currentUser.user,
+          email: currentUser.email,
+          facilityNo: facilityNo,
+          vehNo: vehNo,
+          remarks: remarks,
+          fileData: { base64: base64Str, type: typeStr, name: nameStr }
         };
 
         const serverRes = await apiCall('uploadDirectCR', payload);
+
         if (serverRes.success) {
           Swal.fire("Success", "Direct CR Uploaded Successfully!", "success");
-          document.getElementById('direct_cr_facility').value = ""; document.getElementById('direct_cr_veh').value = "";
-          document.getElementById('direct_cr_remarks').value = ""; document.getElementById('direct_cr_file').value = "";
+          document.getElementById('direct_cr_facility').value = "";
+          document.getElementById('direct_cr_veh').value = "";
+          document.getElementById('direct_cr_remarks').value = "";
+          document.getElementById('direct_cr_file').value = "";
           loadDashboardStats();
-        } else { Swal.fire("Error", serverRes.error || "Upload failed", "error"); }
-      } catch (error) { Swal.fire("Error", error.message, "error"); } 
-      finally { btn.disabled = false; btn.innerText = "Upload & Save Direct CR"; }
+        } else {
+          Swal.fire("Error", serverRes.error || "Upload failed", "error");
+        }
+      } catch (error) {
+        Swal.fire("Error", error.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Upload & Save Direct CR";
+      }
     }
 
     async function loadPendingCRList() {
@@ -2674,6 +2954,7 @@
         globalPendingCR = res.data || [];
         var datalist = document.getElementById('pending_cr_list');
         datalist.innerHTML = "";
+        
         globalPendingCR.forEach(item => {
           var option = document.createElement('option');
           option.value = item.vehNo;
@@ -2686,6 +2967,7 @@
     function loadCRDetails() {
       var searchVal = document.getElementById('cr_search_input').value;
       var selected = globalPendingCR.find(x => x.vehNo === searchVal || x.refNo === searchVal);
+      
       var detailsBox = document.getElementById('cr_details_box');
       var uploadSec = document.getElementById('cr_upload_section');
       
@@ -2697,8 +2979,13 @@
         document.getElementById('lbl_cr_branch').innerText = selected.branch;
         document.getElementById('lbl_cr_user').innerText = selected.reqUser;
         document.getElementById('cr_row_index').value = selected.row;
-        detailsBox.style.display = 'block'; uploadSec.style.display = 'block';
-      } else { detailsBox.style.display = 'none'; uploadSec.style.display = 'none'; }
+        
+        detailsBox.style.display = 'block';
+        uploadSec.style.display = 'block';
+      } else {
+        detailsBox.style.display = 'none';
+        uploadSec.style.display = 'none';
+      }
     }
 
     async function submitFinalCR() {
@@ -2707,36 +2994,60 @@
       var vehNo = document.getElementById('lbl_cr_veh').innerText;
       var refNo = document.getElementById('lbl_cr_ref').innerText;
 
-      if (fileInput.files.length === 0) { return Swal.fire("Required", "Please select a CR document to upload!", "warning"); }
+      if (fileInput.files.length === 0) {
+        return Swal.fire("Required", "Please select a CR document to upload!", "warning");
+      }
+
       var btn = document.getElementById('crSubmitBtn');
-      btn.disabled = true; btn.innerText = "Processing File... ⏳";
+      btn.disabled = true;
+      btn.innerText = "Processing File... ⏳";
 
       try {
-        let f = fileInput.files[0]; let base64Str, typeStr, nameStr;
+        let f = fileInput.files[0];
+        let base64Str, typeStr, nameStr;
+
         if (f.type === "application/pdf") { 
           btn.innerText = "Applying Seal to PDF... ⏳";
-          base64Str = await watermarkPDF(f); typeStr = 'application/pdf'; nameStr = f.name; 
+          base64Str = await watermarkPDF(f);
+          typeStr = 'application/pdf'; 
+          nameStr = f.name; 
         } else { 
           btn.innerText = "Applying Seal to Image... ⏳";
           let compressed = await compressAndWatermarkImage(f, 1000, 0.7); 
-          base64Str = compressed.data; typeStr = compressed.type; nameStr = compressed.name; 
+          base64Str = compressed.data; 
+          typeStr = compressed.type; 
+          nameStr = compressed.name; 
         }
 
         btn.innerText = "Uploading to Drive & Saving to Sheet... 🚀";
+        
         var payload = {
-          row: rowIndex, vehNo: vehNo, refNo: refNo, uploadedBy: currentUser.user,
+          row: rowIndex,
+          vehNo: vehNo,
+          refNo: refNo,
+          uploadedBy: currentUser.user,
           fileData: { base64: base64Str, type: typeStr, name: nameStr }
         };
 
         const serverRes = await apiCall('uploadFinalCR', payload);
+        
         if (serverRes.success) {
           Swal.fire("Success", "Final CR Uploaded Successfully!", "success");
-          document.getElementById('cr_search_input').value = ""; document.getElementById('final_cr_file').value = "";
-          document.getElementById('cr_details_box').style.display = 'none'; document.getElementById('cr_upload_section').style.display = 'none';
-          loadPendingCRList(); loadDashboardStats(); 
-        } else { Swal.fire("Error", serverRes.error, "error"); }
-      } catch (error) { Swal.fire("Error", error.message, "error"); } 
-      finally { btn.disabled = false; btn.innerText = "Upload & Save CR"; }
+          document.getElementById('cr_search_input').value = "";
+          document.getElementById('final_cr_file').value = "";
+          document.getElementById('cr_details_box').style.display = 'none';
+          document.getElementById('cr_upload_section').style.display = 'none';
+          loadPendingCRList(); 
+          loadDashboardStats(); 
+        } else {
+          Swal.fire("Error", serverRes.error, "error");
+        }
+      } catch (error) {
+        Swal.fire("Error", error.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Upload & Save CR";
+      }
     }
 
     var currentCRBlobUrl = null;
@@ -2746,8 +3057,12 @@
       if (modal) modal.style.display = 'none';
       var iframe = document.getElementById('cr_prev_iframe');
       var img = document.getElementById('cr_prev_img');
-      if (iframe) iframe.src = ''; if (img) img.src = '';
-      if (currentCRBlobUrl) { URL.revokeObjectURL(currentCRBlobUrl); currentCRBlobUrl = null; }
+      if (iframe) iframe.src = '';
+      if (img) img.src = '';
+      if (currentCRBlobUrl) {
+        URL.revokeObjectURL(currentCRBlobUrl);
+        currentCRBlobUrl = null;
+      }
     }
 
     async function viewOrDownloadCR(crUrl, vehNo, mode) {
@@ -2756,13 +3071,16 @@
 
       Swal.fire({
         title: 'Preparing CR Document...',
-        html: `නිකුත්කරු දිනය (<b>${todayDate}</b>) Watermark එකට එක් කරමින්... ⏳`,
-        allowOutsideClick: false, didOpen: () => Swal.showLoading()
+        html: `නිකුත්කල දිනය (<b>${todayDate}</b>) Watermark එකට එක් කරමින්... ⏳`,
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
       });
 
       try {
         const res = await apiCall('getCRFileBase64', { fileUrl: crUrl });
-        if (!res.success || !res.base64) { throw new Error(res.error || "Could not load file from Drive"); }
+        if (!res.success || !res.base64) {
+          throw new Error(res.error || "Could not load file from Drive");
+        }
 
         const mimeType = res.mimeType || "application/pdf";
         const cleanVeh = String(vehNo || "CR").replace(/[^a-zA-Z0-9_-]/g, "_");
@@ -2778,8 +3096,14 @@
 
           const pages = pdfDoc.getPages();
           for (let i = 0; i < pages.length; i++) {
-            const page = pages[i]; const { width, height } = page.getSize();
-            page.drawImage(dateSealImg, { x: (width / 2) - (sealWidth / 2), y: (height / 2) - (sealHeight / 2), width: sealWidth, height: sealHeight });
+            const page = pages[i];
+            const { width, height } = page.getSize();
+            page.drawImage(dateSealImg, {
+              x: (width / 2) - (sealWidth / 2),
+              y: (height / 2) - (sealHeight / 2),
+              width: sealWidth,
+              height: sealHeight
+            });
           }
           const updatedPdfBytes = await pdfDoc.save();
           finalBlob = new Blob([updatedPdfBytes], { type: 'application/pdf' });
@@ -2789,7 +3113,8 @@
             const img = new Image();
             img.onload = () => {
               const canvas = document.createElement('canvas');
-              canvas.width = img.width; canvas.height = img.height;
+              canvas.width = img.width;
+              canvas.height = img.height;
               const ctx = canvas.getContext('2d');
               ctx.drawImage(img, 0, 0);
               drawImageSealOnCanvas(ctx, canvas.width, canvas.height, todayDate, true);
@@ -2801,50 +3126,64 @@
         }
 
         Swal.close();
+
         if (currentCRBlobUrl) URL.revokeObjectURL(currentCRBlobUrl);
         currentCRBlobUrl = URL.createObjectURL(finalBlob);
         const downloadName = `CR_${cleanVeh}_${todayDate}${ext}`;
 
         if (mode === 'download') {
           const a = document.createElement('a');
-          a.href = currentCRBlobUrl; a.download = downloadName;
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          a.href = currentCRBlobUrl;
+          a.download = downloadName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
         } else {
           document.getElementById('cr_prev_title').innerText = `CR Document - ${vehNo}`;
-          document.getElementById('cr_prev_subtitle').innerText = `මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කරු දිනය: ${todayDate}`;
+          document.getElementById('cr_prev_subtitle').innerText = `මසක් සඳහා පමණක් වලංගු වේ - නිකුත්කල දිනය: ${todayDate}`;
           const dlBtn = document.getElementById('cr_prev_download_btn');
-          dlBtn.href = currentCRBlobUrl; dlBtn.download = downloadName;
+          dlBtn.href = currentCRBlobUrl;
+          dlBtn.download = downloadName;
 
           const iframe = document.getElementById('cr_prev_iframe');
           const imgEl = document.getElementById('cr_prev_img');
           if (ext === ".pdf") {
-            imgEl.style.display = 'none'; iframe.src = currentCRBlobUrl; iframe.style.display = 'block';
+            imgEl.style.display = 'none';
+            iframe.src = currentCRBlobUrl;
+            iframe.style.display = 'block';
           } else {
-            iframe.style.display = 'none'; imgEl.src = currentCRBlobUrl; imgEl.style.display = 'block';
+            iframe.style.display = 'none';
+            imgEl.src = currentCRBlobUrl;
+            imgEl.style.display = 'block';
           }
           document.getElementById('cr-preview-modal').style.display = 'flex';
         }
       } catch (err) {
         console.error("Dynamic Watermark Error:", err);
-        Swal.close(); window.open(crUrl, '_blank');
+        Swal.close();
+        window.open(crUrl, '_blank');
       }
     }
 
-    var crHistoryLoaded = false; var crHistoryLoading = false;
+    var crHistoryLoaded = false;
+    var crHistoryLoading = false;
 
     async function loadCRHistory() {
       var tbody = document.querySelector("#crHistoryTable tbody");
       if(!tbody) return;
       crHistoryLoading = true;
       tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>Loading data...</td></tr>";
+      
       try {
         const res = await apiCall('getCRUploadHistory', { role: currentUser.role, branch: currentUser.branch, email: currentUser.email }, 'GET');
         tbody.innerHTML = "";
-        crHistoryLoaded = true; crHistoryLoading = false;
+        crHistoryLoaded = true;
+        crHistoryLoading = false;
         if (!res.data || res.data.length === 0) {
           tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>No CR Upload History found.</td></tr>";
           return;
         }
+        
         res.data.forEach(r => {
           var safeUrl = (r.crUrl || "").replace(/'/g, "\\'");
           var safeVeh = (r.vehNo || "CR").replace(/'/g, "\\'");
@@ -2859,6 +3198,7 @@
             </div>`;
           tbody.innerHTML += `<tr><td><b style="color:#e67e22;">${r.company}</b></td><td>${r.uploadDate}</td><td><b>${r.refNo}</b></td><td><span style="color:#0d6efd;font-weight:bold;">${r.vehNo}</span></td><td>${r.makeModel}</td><td>${r.uploadedBy}</td><td>${fileLink}</td></tr>`;
         });
+
         filterCRHistoryTable(true);
       } catch(e) {
         crHistoryLoading = false;
@@ -2867,7 +3207,10 @@
     }
 
     function filterCRHistoryTable(skipAutoLoad) {
-      if (!skipAutoLoad && !crHistoryLoaded && !crHistoryLoading) { loadCRHistory(); return; }
+      if (!skipAutoLoad && !crHistoryLoaded && !crHistoryLoading) {
+        loadCRHistory();
+        return;
+      }
       var fDate = document.getElementById("crFromDate") ? document.getElementById("crFromDate").value : "";
       var tDate = document.getElementById("crToDate") ? document.getElementById("crToDate").value : "";
       var uType = document.getElementById("crTypeFilter") ? document.getElementById("crTypeFilter").value.toLowerCase() : "";
@@ -2880,6 +3223,7 @@
       for (var i = 1; i < tr.length; i++) {
         var tds = tr[i].getElementsByTagName("td");
         if (tds.length < 6) continue;
+
         var tdComp = tds[0].innerText.toLowerCase();
         var tdDateStr = (tds[1].textContent || tds[1].innerText).trim();
         var tdRef = tds[2].innerText.toLowerCase();
@@ -2887,7 +3231,13 @@
         var tdMake = tds[4].innerText.toLowerCase();
         var tdUser = tds[5].innerText.toLowerCase();
 
-        var matchSearch = !search || tdVeh.indexOf(search) > -1 || tdRef.indexOf(search) > -1 || tdComp.indexOf(search) > -1 || tdMake.indexOf(search) > -1 || tdUser.indexOf(search) > -1;
+        var matchSearch = !search ||
+          tdVeh.indexOf(search) > -1 ||
+          tdRef.indexOf(search) > -1 ||
+          tdComp.indexOf(search) > -1 ||
+          tdMake.indexOf(search) > -1 ||
+          tdUser.indexOf(search) > -1;
+
         var isDirect = tdRef.indexOf("(direct)") > -1 || tdMake.indexOf("direct cr") > -1;
         var matchType = true;
         if (uType === "direct") matchType = isDirect;
@@ -2897,9 +3247,18 @@
         var datePart = tdDateStr.split(" ")[0];
         var rowDate = new Date(datePart);
         if (!isNaN(rowDate.getTime())) {
-          if (fDate) { var fromObj = new Date(fDate); fromObj.setHours(0, 0, 0, 0); if (rowDate < fromObj) matchDate = false; }
-          if (tDate) { var toObj = new Date(tDate); toObj.setHours(23, 59, 59, 999); if (rowDate > toObj) matchDate = false; }
+          if (fDate) {
+            var fromObj = new Date(fDate);
+            fromObj.setHours(0, 0, 0, 0);
+            if (rowDate < fromObj) matchDate = false;
+          }
+          if (tDate) {
+            var toObj = new Date(tDate);
+            toObj.setHours(23, 59, 59, 999);
+            if (rowDate > toObj) matchDate = false;
+          }
         }
+
         tr[i].style.display = (matchSearch && matchType && matchDate) ? "" : "none";
       }
     }
@@ -2916,6 +3275,7 @@
       var tbody = document.querySelector("#crPendingTable tbody");
       if(!tbody) return;
       tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>Loading data...</td></tr>";
+      
       try {
         const res = await apiCall('getPendingCRUploads', { role: currentUser.role, branch: currentUser.branch, email: currentUser.email }, 'GET');
         tbody.innerHTML = "";
@@ -2923,6 +3283,7 @@
           tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No Pending CRs found.</td></tr>";
           return;
         }
+        
         res.data.forEach(r => {
           var daysColor = r.pendingDays > 14 ? "color:red; font-weight:bold;" : "color:black;";
           tbody.innerHTML += `<tr><td><b style="color:#e67e22;">${r.company}</b></td><td>${r.valDate}</td><td><span style="color:#0d6efd;font-weight:bold;">${r.vehNo}</span></td><td>${r.branch}</td><td>${r.reqUser}</td><td style="${daysColor}">${r.pendingDays} Days</td></tr>`;
@@ -2931,6 +3292,7 @@
         tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; color:red;'>Error Loading Pending List</td></tr>";
       }
     }
+
   </script>
 </body>
 </html>
