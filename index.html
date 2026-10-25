@@ -46,6 +46,21 @@
     .content-area { flex:1; padding:30px; overflow-y:auto; background-color:var(--bg-light); }
     .welcome-text { font-size:24px; margin-bottom:25px; font-weight:500; color:#333; }
     .welcome-text span { color:var(--accent-red); font-weight:700; }
+    
+    /* Sticky Bar for Dashboard */
+    .dashboard-sticky-header {
+      position: sticky;
+      top: -30px;
+      z-index: 50;
+      background-color: var(--bg-light);
+      padding: 15px 0;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .section-title { font-size: 16px; color: #444; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; margin-top: 30px; }
     .admin-cards { display:flex; gap:15px; margin-bottom:25px; }
     .a-card { flex:1; padding:25px; border-radius:8px; color:white; text-align:center; box-shadow:0 4px 6px rgba(0,0,0,0.1); }
@@ -81,14 +96,61 @@
     .form-box label { font-weight:600; font-size:14px; color:#444; margin-bottom:5px; display:block; }
     .form-box input, .form-box select, .form-box textarea { width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:5px; font-size:14px; outline:none; }
     .btn-submit { width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; transition:0.3s; }
-    .table-container { overflow-x:auto; background:#fff; border:1px solid #ddd; border-radius:8px; padding:15px; margin-bottom:30px; }
+    
+    /* =============== STICKY HEADER & SCROLLABLE TABLE CONTAINER =============== */
+    .table-container { 
+      overflow-x: auto; 
+      overflow-y: auto; 
+      max-height: 65vh; 
+      background: #fff; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      padding: 0; 
+      margin-bottom: 30px; 
+      position: relative;
+    }
+    .rmv-table-wrapper {
+      border: 2px solid #800000; 
+      border-radius: 5px; 
+      overflow-x: auto; 
+      overflow-y: auto; 
+      max-height: 65vh;
+      position: relative;
+    }
     table { width:100%; border-collapse:collapse; text-align:left; font-size:14px; white-space: nowrap; }
-    th { padding:12px; border-bottom:2px solid #ddd; background:#f9f9f9; color:#333; font-weight:600; }
+    th { 
+      padding:12px; 
+      border-bottom:2px solid #ddd; 
+      background:#f9f9f9; 
+      color:#333; 
+      font-weight:600; 
+      position: sticky; 
+      top: 0; 
+      z-index: 20; 
+      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+    }
     td { padding:12px; border-bottom:1px solid #eee; color:#555; }
+    .blue-header th { 
+      background-color:#2c3e50!important; 
+      color:white!important; 
+      border-bottom:2px solid #1a252f!important; 
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    #rmvTable th, #rmvStatusTable th {
+      background-color: #2d2d2d !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+    }
+
     .badge-pending { background:#f1c40f; color:#fff; padding:4px 10px; border-radius:15px; font-size:12px; font-weight:bold; }
     .badge-accepted { background:#2ecc71; color:#fff; padding:4px 10px; border-radius:15px; font-size:12px; font-weight:bold; }
     .badge-rejected { background:#e74c3c; color:#fff; padding:4px 10px; border-radius:15px; font-size:12px; font-weight:bold; }
-    .blue-header th { background-color:#2c3e50!important; color:white!important; border-bottom:2px solid #1a252f!important; }
+    
     .photo-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; background:#f1f3f5; padding:15px; border-radius:8px; margin-bottom:20px; }
     .photo-box { background-color:white; padding:10px; border:1px dashed #adb5bd; border-radius:5px; text-align:center; position:relative; height:90px; display:flex; flex-direction:column; justify-content:center; align-items:center; background-repeat:no-repeat; background-position:center; background-size:cover; }
     .photo-box label { font-size:11px; margin-bottom:3px; background:rgba(255,255,255,0.85); padding:2px 5px; border-radius:4px; z-index:2; pointer-events:none; font-weight:bold; color:#333; }
@@ -118,34 +180,28 @@
 
     /* =============== MOBILE RESPONSIVE STYLES =============== */
     @media (max-width: 768px) {
-      /* Sidebar Overlay */
       .sidebar { position: absolute; height: 100%; z-index: 9999; box-shadow: 2px 0 10px rgba(0,0,0,0.5); }
       .sidebar.closed { width: 0; box-shadow: none; }
       
-      /* Top Header & Content Area */
       .welcome-text { font-size: 18px; margin-bottom: 15px; }
-      .header-right .user-profile .info { display: none; } /* Mobile එකේ ඉඩ ඉතුරු කරන්න නම විතරක් පෙන්වයි */
+      .header-right .user-profile .info { display: none; }
       .content-area { padding: 15px; }
+      .dashboard-sticky-header { top: -15px; }
 
-      /* Cards & Grids to Single Column */
       .admin-cards { flex-direction: column; gap: 10px; }
       .admin-forms-grid { grid-template-columns: 1fr; }
-      .photo-grid { grid-template-columns: 1fr 1fr; } /* ෆොටෝස් පේළියට 2ක ගාණේ පෙන්නයි */
+      .photo-grid { grid-template-columns: 1fr 1fr; }
       .perm-grid { grid-template-columns: 1fr; }
       
-      /* Override inline grid styles for mobile forms */
       #vForm div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
       #val-view-modal div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
       
-      /* RMV & Valuation View Modal Fix for Mobile */
       #rmv-approval-modal > div > div:nth-child(2) { flex-direction: column !important; overflow-y: auto; }
       #rmv-approval-modal > div > div:nth-child(2) > div:first-child { width: 100% !important; border-right: none !important; border-bottom: 1px solid #ddd; height: auto !important; }
       
-      /* Filters Area Fix (Search, Date, Clear buttons) */
       .view-section > div[style*="display:flex; gap:15px; margin-bottom:20px; align-items:flex-end;"] { flex-direction: column; gap: 10px !important; align-items: stretch !important; }
       .view-section > div[style*="display:flex; gap:15px; margin-bottom:20px; align-items:flex-end;"] > div { width: 100%; }
       
-      /* Prevent iOS Auto-zoom on inputs */
       input, select, textarea { font-size: 16px !important; } 
     }
   </style>
@@ -267,7 +323,7 @@
         <!-- DASHBOARD SECTION -->
         <div id="view-dashboard" class="view-section">
           
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div class="dashboard-sticky-header">
             <h1 class="welcome-text" style="margin-bottom:0;">Welcome, <span id="welcome-name">User</span>!</h1>
             <button style="background: #0d6efd; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;" onclick="loadDashboardStats()">Refresh Data</button>
           </div>
@@ -634,8 +690,7 @@
                <div style="flex:1;"><label style="font-size:12px;font-weight:bold;color:#555;">To Date</label><input type="date" id="rmvToDate" onchange="filterRmvTable()" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; outline:none;"></div>
                <div><button onclick="clearRmvFilters()" style="background:#6c757d; color:#fff; padding:10px 20px; border:none; border-radius:4px; cursor:pointer;">Clear</button></div>
              </div>
-             <!-- overflow: hidden වෙනුවට overflow-x: auto දැම්මා -->
-             <div style="border: 2px solid #800000; border-radius: 5px; overflow-x: auto;">
+             <div class="rmv-table-wrapper">
                <table id="rmvTable" style="width:100%; border-collapse:collapse; text-align:center; font-size:14px; white-space: nowrap;">
                  <thead style="background:#2d2d2d; color:#fff;"><tr><th>Company</th><th style="padding:15px;">Date & Time</th><th>Request ID</th><th>Vehicle No</th><th>Branch</th><th>Action By</th><th>Status</th><th>Action</th></tr></thead>
                  <tbody></tbody>
@@ -668,7 +723,7 @@
                <div style="flex:1; min-width:140px;"><label style="font-size:12px;font-weight:bold;color:#555;">To Date</label><input type="date" id="rmvStatToDate" onchange="filterRmvStatusTable()" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; outline:none;"></div>
                <div><button onclick="clearRmvStatusFilters()" style="background:#6c757d; color:#fff; padding:10px 20px; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Clear</button></div>
              </div>
-             <div style="border: 2px solid #800000; border-radius: 5px; overflow-x: auto;">
+             <div class="rmv-table-wrapper">
                <table id="rmvStatusTable" style="width:100%; border-collapse:collapse; text-align:center; font-size:14px; white-space: nowrap;">
                  <thead style="background:#2d2d2d; color:#fff;">
                    <tr>
@@ -710,6 +765,7 @@
                 <div><label>Engine CC</label><input type="number" name="engCc" required></div>
                 <div><label>Fuel Type</label><select name="fuelType"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
                 <div><label>Req. Amount (LKR)</label><input type="number" name="reqAmount" required></div>
+                <div style="grid-column: span 2;"><label>Remarks</label><input type="text" name="remarks" placeholder="Enter any remarks (optional)..."></div>
               </div>
               <h3 style="color:#28a745; border-left:4px solid #28a745; padding-left:10px; margin-top:20px;">2. Inspection Photos</h3>
               <div class="photo-grid">
@@ -723,6 +779,8 @@
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Office View*</label><input type="file" name="img_inside" accept="image/*" onchange="previewImage(this)" required></div>
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Tyre Condition</label><input type="file" name="img_tyre" accept="image/*" onchange="previewImage(this)"></div>
                 <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Customer View*</label><input type="file" name="img_customer" accept="image/*" onchange="previewImage(this)" required></div>
+                <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Other 001</label><input type="file" name="img_other1" accept="image/*" onchange="previewImage(this)"></div>
+                <div class="photo-box"><span class="clear-btn" onclick="clearImage(this)">×</span><label>Other 002</label><input type="file" name="img_other2" accept="image/*" onchange="previewImage(this)"></div>
               </div>
               <button type="submit" id="valSubmitBtn" class="btn-submit">Submit Valuation Request</button>
             </form>
@@ -1197,7 +1255,6 @@
         var uComp = currentUser.company ? currentUser.company.toLowerCase().trim() : "";
         var uRole = currentUser.role ? currentUser.role.toLowerCase().trim() : "";
         
-        // Use the new moduleScopes if available, otherwise default to OWN
         var scope = "OWN";
         var assigned = [];
         try {
@@ -1478,17 +1535,15 @@
                     const imgbbData = await imgbbRes.json();
 
                     if (imgbbData.success) { 
-                        // Save ImgBB URL
                         formData[f.inputName] = imgbbData.data.url; 
                     } else { 
                         throw new Error("Image Upload Failed"); 
                     }
-                    // -------------------------
                   }
                   
                   vbtn.innerText = "Saving Request to Database...";
                   const serverRes = await apiCall('submitValuationForm', { data: formData });
-                  if(serverRes.success) { Swal.fire("Success", serverRes.result, "success"); e.target.reset(); document.querySelectorAll('.photo-box').forEach(b => b.style.backgroundImage = 'none'); loadDashboardStats(); switchView('dashboard', null); } 
+                  if(serverRes.success) { Swal.fire("Success", serverRes.result, "success"); e.target.reset(); document.querySelectorAll('.photo-box').forEach(b => b.style.backgroundImage = 'none'); document.querySelectorAll('.clear-btn').forEach(btn => btn.style.display = 'none'); loadDashboardStats(); switchView('dashboard', null); } 
                   else { Swal.fire("System Error", serverRes.error, "error"); }
                   vbtn.innerText = "Submit Valuation Request"; vbtn.disabled = false;
                 } catch (error) { Swal.fire("Upload Error", error.message, "error"); vbtn.innerText = "Submit Valuation Request"; vbtn.disabled = false; }
@@ -1543,7 +1598,6 @@
           };
         }
         
-        // Mobile එකේදී මුලින්ම ලොග් වෙද්දී Sidebar එක හංගනවා
         if (window.innerWidth <= 768) {
             document.getElementById('main-sidebar').classList.add('closed');
         }
@@ -1667,6 +1721,8 @@
         addPhoto(d.imgInside, "Office View");
         addPhoto(d.imgTyre, "Tyres");
         addPhoto(d.imgCustomer, "Customer View");
+        addPhoto(d.imgOther1, "Other 001");
+        addPhoto(d.imgOther2, "Other 002");
 
         document.getElementById('val-view-modal').style.display = 'block';
     }
@@ -1861,7 +1917,6 @@
       document.getElementById('mod_status').innerText = item.status; document.getElementById('mod_status').style.background = badgeColor; document.getElementById('mod_status').style.color = textColor;
       document.getElementById('mod_action_by').innerText = item.approvedBy && item.approvedBy !== "-" ? item.approvedBy : "Not Actioned Yet";
       
-      // Reject කරලා නම් හේතුව පෙන්වීම
       if (item.status === 'Rejected' && item.remarks && item.remarks !== "") {
           document.getElementById('mod_reject_reason').style.display = 'block';
           document.getElementById('mod_reason_text').innerText = item.remarks;
@@ -1883,7 +1938,6 @@
     function processRmvApproval(status) {
       var item = globalRmvData[currentRmvIndex];
       
-      // Reject කරනවා නම් Text Box එකක් පෙන්නනවා
       if (status === 'Rejected') {
           Swal.fire({
             title: 'Reject Request',
@@ -1903,13 +1957,11 @@
             if (result.isConfirmed) { executeRMVUpdate(status, result.value); }
           });
       } else {
-          // Approve කරනවා නම් සාමාන්‍ය විදිහට Confirm කරනවා
           Swal.fire({ title: 'Confirm Action', text: `Mark this request as Approved?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#198754', confirmButtonText: `Yes, Approve it!` }).then(function(result) {
             if (result.isConfirmed) { executeRMVUpdate(status, ""); }
           });
       }
       
-      // Backend එකට යවන function එක
       async function executeRMVUpdate(actStatus, remarksText) {
           document.getElementById('mod_action_btns').style.display = 'none'; 
           Swal.fire({title: 'Updating...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
@@ -2033,7 +2085,7 @@
     }
 
     // ========================================================
-    // NEW: USER PERMISSIONS & ACCESS MANAGEMENT LOGIC
+    // USER PERMISSIONS & ACCESS MANAGEMENT LOGIC
     // ========================================================
     
     var currentSelectedPermUserRole = "user";
@@ -2089,15 +2141,10 @@
                roleBadge.innerText = rawRole;
            }
 
-           // Role-based Feature Eligibility Rules:
-           // 01. Valuation Approval = valuation admin / system owner ONLY (No access for User / Super admin)
            var canValApprove = (currentSelectedPermUserRole === 'valuation admin' || currentSelectedPermUserRole === 'system owner');
-           // 02. RMV Confirmation Approval = rmv approval / rmv request approval user / system owner ONLY (No access for User / Super admin)
            var canRmvApprove = (currentSelectedPermUserRole === 'rmv approval' || currentSelectedPermUserRole === 'rmv request approval user' || currentSelectedPermUserRole === 'system owner');
-           // 04. System Admin = NOT allowed for User role
            var canSysAdmin = (currentSelectedPermUserRole !== 'user');
 
-           // Enable/Disable checkboxes & show clear notes
            var chkValPend = document.getElementById('chk_val_pend');
            var noteValPend = document.getElementById('note_val_pend');
            if (chkValPend) chkValPend.disabled = !canValApprove;
@@ -2152,7 +2199,6 @@
            if (m.includes("Admin-Map") && canSysAdmin) document.getElementById('chk_admin_map').checked = true;
            if (canSysAdmin && m.includes("Admin-UserMgt") && m.includes("Admin-Map")) document.getElementById('chk_admin_main').checked = true;
            
-           // Clear previous multi-select selections first
            document.querySelectorAll('.perm-branch-select option, .perm-company-select option').forEach(opt => opt.selected = false);
 
            const applySafeSelectValue = (sEl, desiredVal, fallbackVal) => {
@@ -2355,19 +2401,16 @@
               }
           };
 
-          // Courier Locations
           res.data.courier.list.forEach(row => { 
               var color = row.status.toLowerCase() === 'pending' ? '#0d6efd' : '#20c997'; 
               addMarker(row.lat, row.lng, color, `<b>📦 Courier</b><br>ID: ${row.id}<br>Status: <b>${row.status}</b>`);
           }); 
 
-          // RMV Locations
           res.data.rmv.list.forEach(row => { 
               var color = row.status.toLowerCase() === 'pending' ? '#6f42c1' : (row.status.toLowerCase() === 'approved' ? '#198754' : '#dc3545'); 
               addMarker(row.lat, row.lng, color, `<b>🚗 RMV Request</b><br>ID: ${row.id}<br>Vehicle: ${row.vehicle}<br>Status: <b>${row.status}</b>`);
           }); 
           
-          // Valuation Locations
           res.data.valuation.list.forEach(row => { 
               var color = row.status.toLowerCase().includes('pending') ? '#fd7e14' : (row.status.toLowerCase() === 'approved' ? '#198754' : '#dc3545'); 
               addMarker(row.lat, row.lng, color, `<b>📋 Valuation</b><br>Ref: ${row.refNo || row.vehNo}<br>Vehicle: ${row.vehNo}<br>Status: <b>${row.status}</b>`);
@@ -2390,7 +2433,6 @@
       document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
       var view = document.getElementById('view-' + viewId); if(view) view.style.display = 'block';
       
-      // Mobile එකේදී Menu Item එකක් Click කරාම Sidebar එක Auto-Close වෙනවා
       if (window.innerWidth <= 768) {
           document.getElementById('main-sidebar').classList.add('closed');
       }
@@ -2544,19 +2586,16 @@
       ctx.textBaseline = "middle";
 
       if (!onlyDateBar) {
-        // Outer Seal Box (matches original 3-line box: y = -80 to +90)
         ctx.strokeStyle = "rgba(220, 53, 69, 0.40)";
         ctx.lineWidth = 4;
         ctx.strokeRect(-360, -80, 720, 170);
 
-        // Standard 3 Watermark Lines
         ctx.fillStyle = "rgba(220, 53, 69, 0.38)";
         ctx.font = "bold 32px sans-serif";
         ctx.fillText("මෙය වාහනය ලියාපදිංචි සහතිකයේ සත්‍ය පිටපතකි.", 0, -35);
         ctx.fillText("අදායම් බලපත්‍රය ලබාගැනීමට /", 0, 10);
         ctx.fillText("දුම් වාර්තාව ලබාගැනීමට පමණි", 0, 50);
       } else {
-        // Moved further down (y = 170..218) and shifted left (offsetX = -85) so the right-side date never clips
         const offsetX = -85;
         const barW = 680;
         const barY = 170;
@@ -2612,7 +2651,6 @@
       let boxH = fontSize * 4.8;
 
       if (!onlyDateBar) {
-        // Outer Seal Box & Standard 3 Lines (y = -2.4*fontSize to +2.4*fontSize)
         ctx.strokeStyle = "rgba(220, 53, 69, 0.40)";
         ctx.lineWidth = Math.max(2, Math.floor(fontSize / 8));
         ctx.strokeRect(-boxW / 2, -fontSize * 2.4, boxW, boxH);
@@ -2623,7 +2661,6 @@
         ctx.fillText("අදායම් බලපත්‍රය ලබාගැනීමට /", 0, 0, boxW * 0.94);
         ctx.fillText("දුම් වාර්තාව ලබාගැනීමට පමණි", 0, fontSize * 1.4, boxW * 0.94);
       } else {
-        // Moved further down (barY = fontSize * 4.5) and shifted left (offsetX = -fontSize * 3.2) so date never clips on right
         let offsetX = -fontSize * 3.2;
         let barW = fontSize * 21.5;
         let barH = fontSize * 1.55;
@@ -2673,23 +2710,26 @@
         var isAdmin = (myValRole === 'valuation admin' || myValRole === 'system owner');
         data.forEach(req => {
           var imgHtml = ''; var errImg = "this.onerror=null; this.src='https://placehold.co/250x180?text=Image+Error';";
-          if(req.imgFront !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgFront)}')"><img src="${getImgUrl(req.imgFront)}" onerror="${errImg}"><div class="admin-photo-label">Front View</div></div>`;
-          if(req.imgBack !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgBack)}')"><img src="${getImgUrl(req.imgBack)}" onerror="${errImg}"><div class="admin-photo-label">Back View</div></div>`;
-          if(req.imgCr !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgCr)}')"><img src="${getImgUrl(req.imgCr)}" onerror="${errImg}"><div class="admin-photo-label">CR Copy</div></div>`;
-          if(req.imgChassis !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgChassis)}')"><img src="${getImgUrl(req.imgChassis)}" onerror="${errImg}"><div class="admin-photo-label">Chassis</div></div>`;
-          if(req.imgEngine !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgEngine)}')"><img src="${getImgUrl(req.imgEngine)}" onerror="${errImg}"><div class="admin-photo-label">Engine</div></div>`;
-          if(req.imgMeter !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgMeter)}')"><img src="${getImgUrl(req.imgMeter)}" onerror="${errImg}"><div class="admin-photo-label">Meter</div></div>`;
-          if(req.imgSheet !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgSheet)}')"><img src="${getImgUrl(req.imgSheet)}" onerror="${errImg}"><div class="admin-photo-label">Inspection Sheet</div></div>`;
-          if(req.imgInside !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgInside)}')"><img src="${getImgUrl(req.imgInside)}" onerror="${errImg}"><div class="admin-photo-label">Office View</div></div>`;
-          if(req.imgTyre !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgTyre)}')"><img src="${getImgUrl(req.imgTyre)}" onerror="${errImg}"><div class="admin-photo-label">Tyre Condition</div></div>`;
-          if(req.imgCustomer !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgCustomer)}')"><img src="${getImgUrl(req.imgCustomer)}" onerror="${errImg}"><div class="admin-photo-label">Customer View</div></div>`;
+          if(req.imgFront && req.imgFront !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgFront)}')"><img src="${getImgUrl(req.imgFront)}" onerror="${errImg}"><div class="admin-photo-label">Front View</div></div>`;
+          if(req.imgBack && req.imgBack !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgBack)}')"><img src="${getImgUrl(req.imgBack)}" onerror="${errImg}"><div class="admin-photo-label">Back View</div></div>`;
+          if(req.imgCr && req.imgCr !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgCr)}')"><img src="${getImgUrl(req.imgCr)}" onerror="${errImg}"><div class="admin-photo-label">CR Copy</div></div>`;
+          if(req.imgChassis && req.imgChassis !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgChassis)}')"><img src="${getImgUrl(req.imgChassis)}" onerror="${errImg}"><div class="admin-photo-label">Chassis</div></div>`;
+          if(req.imgEngine && req.imgEngine !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgEngine)}')"><img src="${getImgUrl(req.imgEngine)}" onerror="${errImg}"><div class="admin-photo-label">Engine</div></div>`;
+          if(req.imgMeter && req.imgMeter !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgMeter)}')"><img src="${getImgUrl(req.imgMeter)}" onerror="${errImg}"><div class="admin-photo-label">Meter</div></div>`;
+          if(req.imgSheet && req.imgSheet !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgSheet)}')"><img src="${getImgUrl(req.imgSheet)}" onerror="${errImg}"><div class="admin-photo-label">Inspection Sheet</div></div>`;
+          if(req.imgInside && req.imgInside !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgInside)}')"><img src="${getImgUrl(req.imgInside)}" onerror="${errImg}"><div class="admin-photo-label">Office View</div></div>`;
+          if(req.imgTyre && req.imgTyre !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgTyre)}')"><img src="${getImgUrl(req.imgTyre)}" onerror="${errImg}"><div class="admin-photo-label">Tyre Condition</div></div>`;
+          if(req.imgCustomer && req.imgCustomer !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgCustomer)}')"><img src="${getImgUrl(req.imgCustomer)}" onerror="${errImg}"><div class="admin-photo-label">Customer View</div></div>`;
+          if(req.imgOther1 && req.imgOther1 !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgOther1)}')"><img src="${getImgUrl(req.imgOther1)}" onerror="${errImg}"><div class="admin-photo-label">Other 001</div></div>`;
+          if(req.imgOther2 && req.imgOther2 !== 'No Image') imgHtml += `<div class="admin-photo-item" onclick="openModal('${getImgUrl(req.imgOther2)}')"><img src="${getImgUrl(req.imgOther2)}" onerror="${errImg}"><div class="admin-photo-label">Other 002</div></div>`;
 
           var actionHtml = '';
           if (isAdmin) {
              actionHtml = `<div class="admin-valuation-form"><h4 style="margin-bottom:15px; color:#c62828;">Inspector Assessment <span style="font-size:12px; color:#555;">(${req.company})</span></h4><div class="admin-input-row"><div><label>Market Value (LKR)</label><input type="number" id="mVal_${req.row}" class="admin-input" value="${req.defaultMarket || ''}"></div><div><label>Forced Sale Value (LKR)</label><input type="number" id="sVal_${req.row}" class="admin-input" value="${req.defaultSale || ''}"></div></div><label>Remarks</label><input type="text" id="rem_${req.row}" class="admin-input" placeholder="Add any comments..."><div style="display:flex; gap:10px; margin-top:10px;"><button onclick="processValuation(${req.row}, 'Approved')" style="flex:1; background:#198754; color:white; padding:12px; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Approve & Generate PDF</button><button onclick="processValuation(${req.row}, 'Rejected')" style="flex:1; background:#dc3545; color:white; padding:12px; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Reject Request</button></div></div>`;
           } else { actionHtml = '<div style="background:#fff3cd; padding:15px; border-radius:5px; text-align:center; font-weight:bold; color:#856404; border:1px solid #ffeeba; margin-top:15px;">Status: Pending Admin Approval ⏳</div>'; }
 
-          var card = `<div class="admin-req-card"><div class="info-grid"><div class="info-box"><strong>Vehicle No</strong><span>${req.vehNo}</span></div><div class="info-box"><strong>Make & Model</strong><span>${req.make} ${req.model}</span></div><div class="info-box"><strong>YOM</strong><span>${req.yom}</span></div><div class="info-box"><strong>Requested By</strong><span>${req.reqName} (${req.reqBranch})</span></div><div class="info-box"><strong>Req Amount</strong><span>Rs. ${req.reqAmount}</span></div><div class="info-box"><strong>Chassis No</strong><span>${req.chassisNo}</span></div></div><div class="admin-photo-grid">${imgHtml}</div>${actionHtml}</div>`;
+          var reqRemarksHtml = (req.remarks && req.remarks !== '-') ? `<div class="info-box" style="grid-column: span 3;"><strong>Requester Remarks</strong><span>${req.remarks}</span></div>` : '';
+          var card = `<div class="admin-req-card"><div class="info-grid"><div class="info-box"><strong>Vehicle No</strong><span>${req.vehNo}</span></div><div class="info-box"><strong>Make & Model</strong><span>${req.make} ${req.model}</span></div><div class="info-box"><strong>YOM</strong><span>${req.yom}</span></div><div class="info-box"><strong>Requested By</strong><span>${req.reqName} (${req.reqBranch})</span></div><div class="info-box"><strong>Req Amount</strong><span>Rs. ${req.reqAmount}</span></div><div class="info-box"><strong>Chassis No</strong><span>${req.chassisNo}</span></div>${reqRemarksHtml}</div><div class="admin-photo-grid">${imgHtml}</div>${actionHtml}</div>`;
           container.innerHTML += card;
         });
       } catch(e) { container.innerHTML = "<div style='color:red;'>Error Loading Valuations</div>"; }
@@ -2817,7 +2857,6 @@
           XLSX.utils.book_append_sheet(wb, ws, "Valuation History");
           XLSX.writeFile(wb, fileName);
         } else {
-          // Fallback to CSV if XLSX CDN fails to load
           var headers = Object.keys(exportData[0]);
           var csvRows = [headers.join(",")];
           exportData.forEach(function(rowObj) {
