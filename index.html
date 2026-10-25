@@ -2425,9 +2425,35 @@
     }
 
     function toggleSidebar() { document.getElementById('main-sidebar').classList.toggle('closed'); }
-    function toggleSubMenu(id, el) { var sub = document.getElementById(id); if(!sub) return; sub.classList.toggle('open'); var icon = el.querySelector('.arrow'); if(sub.classList.contains('open')) { icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up'); } else { icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down'); } }
-    
-    function switchView(viewId, element) {
+    function toggleSubMenu(id, el) {
+  // 1. කලින් open වෙලා තියෙන අනිත් ඔක්කොම sub-menu වහනවා
+  document.querySelectorAll('.sub-menu.open').forEach(menu => {
+    if (menu.id !== id) {
+      menu.classList.remove('open');
+      var prevCategory = menu.previousElementSibling;
+      if (prevCategory) {
+        var prevIcon = prevCategory.querySelector('.arrow');
+        if (prevIcon) {
+          prevIcon.classList.remove('fa-chevron-up');
+          prevIcon.classList.add('fa-chevron-down');
+        }
+      }
+    }
+  });
+
+  // 2. Click කරපු මෙනු එක open / close කරනවා
+  var sub = document.getElementById(id);
+  if (!sub) return;
+  sub.classList.toggle('open');
+  var icon = el.querySelector('.arrow');
+  if (sub.classList.contains('open')) {
+    icon.classList.remove('fa-chevron-down');
+    icon.classList.add('fa-chevron-up');
+  } else {
+    icon.classList.remove('fa-chevron-up');
+    icon.classList.add('fa-chevron-down');
+  }
+}    function switchView(viewId, element) {
       document.querySelectorAll('.menu-item').forEach(el => { el.classList.remove('active'); var ic = el.getAttribute('data-icon'); if(ic) el.querySelector('i').className = ic; });
       if(element) { element.classList.add('active'); element.querySelector('i').className = 'fas fa-check-circle'; }
       document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
