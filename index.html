@@ -1522,22 +1522,21 @@
                     await new Promise(r => setTimeout(r, 100)); 
                     
                     let compressed = await compressImage(f.file, 800, 0.6); 
-                    let base64Str = compressed.data; 
-
-                    // --- ImgBB Upload Code ---
-                    const imgbbFormData = new FormData();
-                    imgbbFormData.append("image", base64Str);
-
-                    const imgbbRes = await fetch("https://api.imgbb.com/1/upload?key=ad4610425eecdef989e38d0e3a3564e2", {
-                        method: "POST",
-                        body: imgbbFormData
+                    
+                    // --- කෙලින්ම Google Drive එකට Upload කිරීම (Code.gs හරහා) ---
+                    const uploadRes = await apiCall('uploadValuationImage', { 
+                        data: {
+                            vehicleNo: formData.vehicleNo || "Unknown",
+                            key: f.inputName,
+                            type: compressed.type,
+                            base64: compressed.data
+                        }
                     });
-                    const imgbbData = await imgbbRes.json();
 
-                    if (imgbbData.success) { 
-                        formData[f.inputName] = imgbbData.data.url; 
+                    if (uploadRes.success && uploadRes.url) { 
+                        formData[f.inputName] = uploadRes.url; 
                     } else { 
-                        throw new Error("Image Upload Failed"); 
+                        throw new Error(uploadRes.error || "Image Upload Failed"); 
                     }
                   }
                   
@@ -1566,23 +1565,22 @@
                 let fileInput = e.target.querySelector('input[type="file"]');
                 if(fileInput.files.length > 0) {
                   let f = fileInput.files[0]; 
-                  
                   let compressed = await compressImage(f, 800, 0.6); 
-                  let base64Str = compressed.data; 
-
-                  const imgbbFormData = new FormData();
-                  imgbbFormData.append("image", base64Str);
-
-                  const imgbbRes = await fetch("https://api.imgbb.com/1/upload?key=ad4610425eecdef989e38d0e3a3564e2", {
-                      method: "POST",
-                      body: imgbbFormData
+                  
+                  // --- RMV CR පොතත් කෙලින්ම Google Drive එකට Upload කිරීම ---
+                  const uploadRes = await apiCall('uploadValuationImage', { 
+                      data: {
+                          vehicleNo: formData.vehicleNo || "RMV",
+                          key: "RMV_CR",
+                          type: compressed.type,
+                          base64: compressed.data
+                      }
                   });
-                  const imgbbData = await imgbbRes.json();
 
-                  if (imgbbData.success) { 
-                      formData.crBookUrl = imgbbData.data.url; 
+                  if (uploadRes.success && uploadRes.url) { 
+                      formData.crBookUrl = uploadRes.url; 
                   } else { 
-                      throw new Error("Failed to upload CR Book to ImgBB"); 
+                      throw new Error(uploadRes.error || "Failed to upload CR Book"); 
                   }
                 } else { throw new Error("CR Book is required!"); }
                 
@@ -1596,8 +1594,7 @@
             if (navigator.geolocation) { navigator.geolocation.getCurrentPosition(pos => executeSubmit(pos.coords.latitude, pos.coords.longitude), err => executeSubmit("", ""), { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }); } 
             else { executeSubmit("", ""); }
           };
-        }
-        
+        }        
         if (window.innerWidth <= 768) {
             document.getElementById('main-sidebar').classList.add('closed');
         }
